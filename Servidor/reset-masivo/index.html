@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reset Masivo — DGTI Zapopan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+--bg:#f0f2f5;--surface:#fff;--surface-2:#f8f9fb;--surface-off:#eef0f4;
+--border:#dde1e8;--divider:#e8ebf0;--text:#1a1f2e;--muted:#5a6170;--faint:#9aa0ad;--inverse:#fff;
+--primary:#1a4480;--primary-h:#143568;--primary-hl:#dce6f4;
+--success:#2d7a3a;--success-hl:#daf0dd;
+--warn:#9a6000;--warn-hl:#fff3cd;
+--error:#b01c2e;--error-hl:#fce8ea;
+--oaj:#2d7a3a;--oaj-hl:#daf0dd;
+--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+--xs:clamp(.75rem,.70rem + .25vw,.875rem);--sm:clamp(.875rem,.80rem + .35vw,1rem);
+--s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;--s6:1.5rem;--s8:2rem;
+--r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+--sh-sm:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 12px rgba(0,0,0,.10);--sh-lg:0 8px 24px rgba(0,0,0,.14);
+--tr:180ms cubic-bezier(.16,1,.3,1);}
+[data-theme="dark"]{
+--bg:#0f1117;--surface:#161b27;--surface-2:#1c2130;--surface-off:#1a1f2c;
+--border:#2a3140;--divider:#222838;--text:#e2e5ec;--muted:#7a8496;--faint:#4a5160;--inverse:#0f1117;
+--primary:#5b8dd4;--primary-h:#3a6fbe;--primary-hl:#1c2a40;
+--success:#4caf63;--success-hl:#1a3020;
+--warn:#d4a017;--warn-hl:#302500;
+--error:#e05a68;--error-hl:#301520;
+--oaj:#4caf63;--oaj-hl:#1a3020;
+--sh-sm:0 1px 3px rgba(0,0,0,.30);--sh-md:0 4px 12px rgba(0,0,0,.40);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+body{min-height:100dvh;font-family:var(--font);font-size:var(--sm);color:var(--text);background:var(--bg);transition:background var(--tr),color var(--tr);}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
+input,textarea,select{font:inherit;color:inherit;}
+a{text-decoration:none;color:inherit;}
+
+/* Topbar */
+.topbar{background:var(--primary);color:var(--inverse);padding:var(--s3) var(--s6);
+display:flex;align-items:center;justify-content:space-between;gap:var(--s4);
+box-shadow:var(--sh-md);position:sticky;top:0;z-index:100;}
+.brand{display:flex;align-items:center;gap:var(--s3);}
+.brand img{height:32px;filter:brightness(0) invert(1);opacity:.92;}
+.brand-title{font-size:var(--sm);font-weight:700;letter-spacing:-.01em;}
+.brand-sub{font-size:var(--xs);opacity:.75;}
+.topbar-right{display:flex;align-items:center;gap:var(--s3);}
+.session-bar{display:flex;align-items:center;gap:var(--s2);font-size:var(--xs);font-family:var(--mono);
+background:rgba(255,255,255,.15);padding:var(--s2) var(--s3);border-radius:var(--r-full);}
+.btn-icon{padding:var(--s2);border-radius:var(--r-md);opacity:.85;
+transition:opacity var(--tr),background var(--tr);display:flex;align-items:center;}
+.btn-icon:hover{opacity:1;background:rgba(255,255,255,.15);}
+
+/* Layout */
+.main{max-width:800px;margin:0 auto;padding:var(--s6);display:flex;flex-direction:column;gap:var(--s5);}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh-sm);overflow:hidden;}
+.card-head{padding:var(--s4) var(--s6);border-bottom:1px solid var(--divider);
+display:flex;align-items:center;justify-content:space-between;gap:var(--s4);background:var(--surface-2);}
+.card-title{font-size:var(--sm);font-weight:700;display:flex;align-items:center;gap:var(--s2);}
+.card-body{padding:var(--s5) var(--s6);}
+.section-label{font-size:var(--xs);font-weight:700;color:var(--muted);text-transform:uppercase;
+letter-spacing:.06em;display:block;margin-bottom:var(--s2);}
+
+/* Domain Tabs */
+.domain-tabs{display:flex;gap:var(--s2);margin-bottom:var(--s4);
+background:var(--surface-off);padding:var(--s1);border-radius:var(--r-lg);
+border:1px solid var(--border);width:fit-content;}
+.domain-tab{padding:var(--s2) var(--s5);border-radius:var(--r-md);
+font-size:var(--xs);font-weight:600;font-family:var(--mono);
+color:var(--muted);transition:all var(--tr);display:flex;align-items:center;gap:var(--s2);cursor:pointer;}
+.domain-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--sh-sm);border:1px solid var(--border);}
+.domain-tab.active.cjf{color:var(--primary);}
+.domain-tab.active.oaj{color:var(--oaj);}
+.dot-tab{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-tab.cjf{background:var(--primary);}
+.dot-tab.oaj{background:var(--oaj);}
+
+/* Inputs */
+.input-wrap{position:relative;}
+.input-wrap svg.ico{position:absolute;left:var(--s3);top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.field-input{width:100%;padding:var(--s3) var(--s3) var(--s3) var(--s8);
+border:2px solid var(--border);border-radius:var(--r-lg);background:var(--surface-2);
+font-size:var(--sm);transition:border-color var(--tr),box-shadow var(--tr);}
+.field-input.no-icon{padding-left:var(--s3);}
+.field-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl);background:var(--surface);}
+textarea.field-input{resize:vertical;min-height:140px;padding-top:var(--s3);font-family:var(--mono);font-size:var(--xs);line-height:1.6;}
+.pwd-wrap{position:relative;}
+.pwd-wrap .field-input{padding-right:2.5rem;}
+.pwd-toggle{position:absolute;right:var(--s2);top:50%;transform:translateY(-50%);
+padding:var(--s2);border-radius:var(--r-md);color:var(--muted);transition:color var(--tr);}
+.pwd-toggle:hover{color:var(--text);}
+.strength-bar{height:4px;border-radius:var(--r-full);background:var(--divider);overflow:hidden;margin-top:var(--s2);}
+.strength-fill{height:100%;border-radius:var(--r-full);transition:width .3s ease,background .3s ease;width:0%;}
+.strength-label{font-size:.68rem;color:var(--muted);margin-top:var(--s1);}
+.counter{font-size:var(--xs);color:var(--muted);font-family:var(--mono);margin-top:var(--s1);}
+
+/* Checkbox */
+.check-row{display:flex;align-items:center;gap:var(--s2);font-size:var(--xs);cursor:pointer;user-select:none;}
+.check-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--primary);cursor:pointer;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s5);
+border-radius:var(--r-md);font-size:var(--sm);font-weight:500;white-space:nowrap;transition:all var(--tr);}
+.btn-primary{background:var(--primary);color:var(--inverse);}
+.btn-primary:hover{background:var(--primary-h);}
+.btn-error{background:var(--error);color:#fff;}
+.btn-error:hover{filter:brightness(1.1);}
+.btn-ghost{background:var(--surface-off);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{filter:brightness(.96);}
+.btn-sm{padding:var(--s1) var(--s3);font-size:var(--xs);}
+.btn:disabled{opacity:.4;pointer-events:none;}
+.btn-row{display:flex;gap:var(--s3);flex-wrap:wrap;margin-top:var(--s5);}
+
+/* Progress */
+.progress-bar{background:var(--surface-off);border:1px solid var(--border);
+border-radius:var(--r-full);overflow:hidden;height:8px;margin-top:var(--s3);}
+.progress-fill{height:100%;background:var(--primary);border-radius:var(--r-full);
+transition:width .3s ease;width:0%;}
+.progress-label{font-size:var(--xs);color:var(--muted);font-family:var(--mono);margin-top:var(--s2);}
+
+/* Results */
+.results-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--s3);}
+.stats-row{display:flex;gap:var(--s3);flex-wrap:wrap;}
+.stat-chip{display:inline-flex;align-items:center;gap:var(--s2);
+padding:var(--s2) var(--s4);border-radius:var(--r-full);font-size:var(--xs);font-weight:700;}
+.stat-ok{background:var(--success-hl);color:var(--success);}
+.stat-err{background:var(--error-hl);color:var(--error);}
+.stat-total{background:var(--primary-hl);color:var(--primary);}
+.results-table{width:100%;border-collapse:collapse;font-size:var(--xs);margin-top:var(--s4);}
+.results-table th{text-align:left;font-size:.65rem;font-weight:700;
+text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+padding:var(--s2) var(--s3);border-bottom:2px solid var(--divider);}
+.results-table td{padding:var(--s2) var(--s3);border-bottom:1px solid var(--divider);
+font-family:var(--mono);vertical-align:middle;}
+.results-table tr:last-child td{border-bottom:none;}
+.results-table tr:hover td{background:var(--surface-2);}
+.badge{display:inline-flex;align-items:center;padding:.2rem var(--s2);
+border-radius:var(--r-full);font-size:.62rem;font-weight:700;}
+.badge-ok{background:var(--success-hl);color:var(--success);}
+.badge-err{background:var(--error-hl);color:var(--error);}
+.badge-pending{background:var(--primary-hl);color:var(--primary);}
+.err-msg{color:var(--error);font-size:.68rem;font-family:var(--font);}
+
+/* Notice */
+.notice{padding:var(--s3) var(--s4);border-radius:var(--r-md);
+font-size:var(--xs);display:flex;align-items:flex-start;gap:var(--s2);border:1px solid;}
+.notice-warn{background:var(--warn-hl);color:var(--warn);border-color:var(--warn);}
+.notice-err{background:var(--error-hl);color:var(--error);border-color:var(--error);}
+
+/* Login overlay */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);
+z-index:200;display:none;align-items:center;justify-content:center;padding:var(--s4);}
+.overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);
+box-shadow:var(--sh-lg);width:100%;max-width:380px;overflow:hidden;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;
+padding:var(--s4) var(--s5);border-bottom:1px solid var(--divider);}
+.modal-title{font-weight:700;font-size:var(--sm);display:flex;align-items:center;gap:var(--s2);}
+.modal-body{padding:var(--s5);display:flex;flex-direction:column;gap:var(--s4);}
+.back-link{display:inline-flex;align-items:center;gap:var(--s2);
+font-size:var(--xs);color:var(--muted);transition:color var(--tr);}
+.back-link:hover{color:var(--primary);}
+
+/* Spinner */
+.spinner{width:14px;height:14px;flex-shrink:0;border:2px solid rgba(255,255,255,.35);
+border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;}
+.spinner.dark{border-color:rgba(0,0,0,.15);border-top-color:var(--primary);}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:600px){
+.main{padding:var(--s4);}
+.card-body{padding:var(--s4);}
+.topbar{padding:var(--s3) var(--s4);}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="brand">
+    <img src="../DGTI_Zapopan/logo_oaj.png" alt="OAJ" onerror="this.style.display='none'">
+    <div>
+      <div class="brand-title">Reset Masivo de Contraseñas</div>
+      <div class="brand-sub">Active Directory — CJF / OAJ</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="session-bar" id="session-bar" style="display:none;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span id="session-user"></span>
+    </div>
+    <a href="/DGTI_Zapopan/" class="btn-icon" title="Volver al portal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    <button class="btn-icon" id="theme-toggle" title="Cambiar tema">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="btn-icon" id="btn-logout" title="Cerrar sesión" style="display:none;" onclick="logout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Login Overlay -->
+<div class="overlay" id="login-overlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Iniciar sesión
+      </div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <label class="section-label">Dominio</label>
+        <div class="domain-tabs" style="margin-bottom:0;">
+          <button class="domain-tab active cjf" onclick="setLoginDomain('cjf',this)">
+            <span class="dot-tab cjf"></span>CJF
+          </button>
+          <button class="domain-tab oaj" onclick="setLoginDomain('oaj',this)">
+            <span class="dot-tab oaj"></span>OAJ
+          </button>
+        </div>
+      </div>
+      <div>
+        <label class="section-label">Usuario de red</label>
+        <div class="input-wrap">
+          <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <input class="field-input" type="text" id="login-user" placeholder="nombre.apellido" autocomplete="username" autocorrect="off" autocapitalize="none">
+        </div>
+      </div>
+      <div>
+        <label class="section-label">Contraseña</label>
+        <div class="pwd-wrap">
+          <input class="field-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+          <button class="pwd-toggle btn-icon" onclick="togglePwd('login-pass',this)" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="login-error" class="notice notice-err" style="display:none;"></div>
+      <button class="btn btn-primary" id="btn-login" onclick="doLogin()" style="width:100%;justify-content:center;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Entrar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Form Card -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cambio masivo de contraseñas
+      </div>
+    </div>
+    <div class="card-body">
+
+      <!-- Aviso -->
+      <div class="notice notice-warn" style="margin-bottom:var(--s5);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Esta operación es irreversible. Verifica los usuarios antes de ejecutar.</span>
+      </div>
+
+      <!-- Dominio activo (solo lectura) -->
+      <div style="margin-bottom:var(--s4);display:flex;align-items:center;gap:var(--s2);">
+        <span class="section-label" style="margin-bottom:0;">Dominio activo</span>
+        <span id="dominio-badge" style="display:inline-flex;align-items:center;gap:var(--s2);
+          padding:var(--s1) var(--s3);border-radius:var(--r-full);font-size:var(--xs);
+          font-weight:700;font-family:var(--mono);background:var(--primary-hl);color:var(--primary);">
+          —
+        </span>
+      </div>
+
+      <!-- Usuarios -->
+      <div style="margin-bottom:var(--s4);">
+        <label class="section-label" for="user-list">Usuarios (uno por línea)</label>
+        <textarea class="field-input no-icon" id="user-list"
+          placeholder="juanita.martinez&#10;carlos.perez&#10;roberto.lopez"
+          oninput="countUsers()"></textarea>
+        <div class="counter" id="user-count"></div>
+      </div>
+
+      <!-- Nueva contraseña -->
+      <div style="margin-bottom:var(--s4);">
+        <label class="section-label" for="nueva-pass">Nueva contraseña</label>
+        <div class="pwd-wrap">
+          <input class="field-input no-icon" type="password" id="nueva-pass"
+            placeholder="••••••••••"
+            oninput="evaluarPass(this.value)"
+            autocomplete="new-password">
+          <button class="pwd-toggle btn-icon" onclick="togglePwd('nueva-pass',this)" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+
+      <!-- Opciones -->
+      <div style="margin-bottom:var(--s4);display:flex;flex-direction:column;gap:var(--s2);">
+        <label class="check-row">
+          <input type="checkbox" id="chk-forzar">
+          Forzar cambio de contraseña en el siguiente inicio de sesión
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="chk-desbloquear">
+          Desbloquear cuenta si está bloqueada
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="btn-row">
+        <button class="btn btn-error" id="btn-resetear" onclick="ejecutarReset()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Resetear contraseñas
+        </button>
+        <button class="btn btn-ghost" onclick="limpiar()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Progreso -->
+      <div id="progress-wrap" style="display:none;margin-top:var(--s5);">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-label" id="progress-label"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card" id="card-results" style="display:none;">
+    <div class="card-head">
+      <div class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Resultados
+      </div>
+      <div class="stats-row" id="stats-row"></div>
+    </div>
+    <div class="card-body" style="padding-top:0;padding-bottom:var(--s4);overflow-x:auto;">
+      <table class="results-table" id="results-table">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Usuario</th>
+            <th>DN</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="results-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Tema ──────────────────────────────────────────────────────────────────
+const Theme = (() => {
+  const root = document.documentElement;
+  const btn  = document.getElementById('theme-toggle');
+  let dark = matchMedia('(prefers-color-scheme:dark)').matches;
+  function apply() {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.innerHTML = dark
+      ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
+      : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  }
+  btn.addEventListener('click', () => { dark = !dark; apply(); });
+  apply();
+})();
+
+// ── Estado ────────────────────────────────────────────────────────────────
+let dominio = 'cjf';        // se actualiza al verificar sesión
+let loginDominio = 'cjf';
+
+function getToken() { return sessionStorage.getItem('gad_token') || null; }
+
+// ── Sesión ────────────────────────────────────────────────────────────────
+async function verificarSesion() {
+  const t = getToken();
+  if (!t) { mostrarLogin(); return false; }
+  const r = await fetch('/api/session', { headers: { 'Authorization': 'Bearer ' + t } }).catch(() => null);
+  if (!r || r.status !== 200) { sessionStorage.removeItem('gad_token'); mostrarLogin(); return false; }
+  const d = await r.json();
+  if (!d.ok) { sessionStorage.removeItem('gad_token'); mostrarLogin(); return false; }
+  mostrarSesion(d.display, d.domain);
+  return true;
+}
+
+function mostrarSesion(display, dom) {
+  document.getElementById('session-user').textContent = display;
+  document.getElementById('session-bar').style.display = 'flex';
+  document.getElementById('btn-logout').style.display = 'flex';
+  document.getElementById('login-overlay').classList.remove('show');
+  // actualizar dominio activo
+  if (dom) {
+    dominio = dom.toLowerCase();
+    const badge = document.getElementById('dominio-badge');
+    badge.textContent = dom.toUpperCase();
+    badge.style.background = dominio === 'oaj' ? 'var(--oaj-hl)' : 'var(--primary-hl)';
+    badge.style.color      = dominio === 'oaj' ? 'var(--oaj)'    : 'var(--primary)';
+  }
+}
+
+function mostrarLogin() {
+  document.getElementById('login-overlay').classList.add('show');
+  document.getElementById('session-bar').style.display = 'none';
+  document.getElementById('btn-logout').style.display = 'none';
+}
+
+async function logout() {
+  const t = getToken();
+  if (t) await fetch('/api/logout', { method: 'POST', headers: { 'Authorization': 'Bearer ' + t } }).catch(() => {});
+  sessionStorage.removeItem('gad_token');
+  mostrarLogin();
+}
+
+// ── Login ─────────────────────────────────────────────────────────────────
+function setLoginDomain(d, el) {
+  loginDominio = d;
+  document.querySelectorAll('#login-overlay .domain-tab').forEach(t => t.classList.remove('active','cjf','oaj'));
+  el.classList.add('active', d);
+}
+
+async function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  const btn   = document.getElementById('btn-login');
+  if (!user || !pass) { errEl.textContent = 'Ingresa usuario y contraseña.'; errEl.style.display='flex'; return; }
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Verificando…';
+  try {
+    const r = await fetch('/api/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user, password: pass, dominio: loginDominio })
+    });
+    const d = await r.json();
+    if (r.ok && d.ok) { sessionStorage.setItem('gad_token', d.token); mostrarSesion(d.display, loginDominio); }
+    else { errEl.textContent = d.error || 'Credenciales incorrectas.'; errEl.style.display = 'flex'; }
+  } catch(e) { errEl.textContent = 'Error de conexión: ' + e.message; errEl.style.display = 'flex'; }
+  finally { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Entrar'; }
+}
+
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// ── Contador usuarios ──────────────────────────────────────────────────────
+function countUsers() {
+  const n = document.getElementById('user-list').value.split('\n').map(l=>l.trim()).filter(Boolean).length;
+  document.getElementById('user-count').textContent = n > 0 ? `${n} usuario${n>1?'s':''}` : '';
+}
+
+// ── Fortaleza contraseña ───────────────────────────────────────────────────
+function evaluarPass(v) {
+  const fill  = document.getElementById('strength-fill');
+  const label = document.getElementById('strength-label');
+  if (!v) { fill.style.width='0%'; label.textContent=''; return; }
+  let score = 0;
+  if (v.length >= 8)  score++;
+  if (v.length >= 12) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const levels = [
+    { w:'20%', bg:'#e05a68', txt:'Muy débil' },
+    { w:'40%', bg:'#d4a017', txt:'Débil' },
+    { w:'60%', bg:'#d4a017', txt:'Regular' },
+    { w:'80%', bg:'#2d7a3a', txt:'Fuerte' },
+    { w:'100%',bg:'#2d7a3a', txt:'Muy fuerte' },
+  ];
+  const lv = levels[Math.min(score, 4)];
+  fill.style.width = lv.w;
+  fill.style.background = lv.bg;
+  label.textContent = lv.txt;
+}
+
+// ── Toggle contraseña ──────────────────────────────────────────────────────
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ── Limpiar ────────────────────────────────────────────────────────────────
+function limpiar() {
+  document.getElementById('user-list').value = '';
+  document.getElementById('nueva-pass').value = '';
+  document.getElementById('user-count').textContent = '';
+  document.getElementById('strength-fill').style.width = '0%';
+  document.getElementById('strength-label').textContent = '';
+  document.getElementById('chk-forzar').checked = false;
+  document.getElementById('chk-desbloquear').checked = false;
+  document.getElementById('card-results').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+}
+
+// ── Ejecutar reset ─────────────────────────────────────────────────────────
+async function ejecutarReset() {
+  const raw   = document.getElementById('user-list').value;
+  const users = [...new Set(raw.split('\n').map(l=>l.trim().toLowerCase()).filter(Boolean))];
+  const pass  = document.getElementById('nueva-pass').value;
+  const forzar      = document.getElementById('chk-forzar').checked;
+  const desbloquear = document.getElementById('chk-desbloquear').checked;
+
+  if (!users.length) { alert('Agrega al menos un usuario.'); return; }
+  if (!pass)          { alert('Escribe la nueva contraseña.'); return; }
+  if (pass.length < 8) { alert('La contraseña debe tener al menos 8 caracteres.'); return; }
+
+  const confirmMsg = `¿Resetear contraseña de ${users.length} usuario(s) en ${dominio.toUpperCase()}?\n\nEsta acción no se puede deshacer.`;
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById('btn-resetear');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Procesando…';
+
+  const progWrap = document.getElementById('progress-wrap');
+  const progFill = document.getElementById('progress-fill');
+  const progLabel = document.getElementById('progress-label');
+  progWrap.style.display = 'block';
+  progFill.style.width = '0%';
+  progLabel.textContent = 'Iniciando…';
+
+  const token = getToken();
+  const resultados = [];
+
+  for (let i = 0; i < users.length; i++) {
+    const u = users[i];
+    progLabel.textContent = `Procesando ${u} (${i+1} / ${users.length})…`;
+    progFill.style.width = `${Math.round(((i) / users.length) * 100)}%`;
+    try {
+      const r = await fetch('/api/ad/reset-masivo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ usuario: u, nueva_pass: pass, dominio, forzar, desbloquear })
+      });
+      const d = await r.json();
+      if (r.status === 401) { sessionStorage.removeItem('gad_token'); mostrarLogin(); return; }
+      resultados.push({ usuario: u, ok: d.ok, dn: d.dn || '', error: d.error || '' });
+    } catch(e) {
+      resultados.push({ usuario: u, ok: false, dn: '', error: e.message });
+    }
+  }
+
+  progFill.style.width = '100%';
+  const ok_n  = resultados.filter(r=>r.ok).length;
+  const err_n = resultados.filter(r=>!r.ok).length;
+  progLabel.textContent = `✓ Completado — ${ok_n} exitosos, ${err_n} con error`;
+
+  renderResultados(resultados);
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Resetear contraseñas';
+}
+
+function renderResultados(rows) {
+  const card  = document.getElementById('card-results');
+  const tbody = document.getElementById('results-body');
+  const stats = document.getElementById('stats-row');
+  const ok_n  = rows.filter(r=>r.ok).length;
+  const err_n = rows.filter(r=>!r.ok).length;
+
+  stats.innerHTML = `
+    <span class="stat-chip stat-total">Total: ${rows.length}</span>
+    <span class="stat-chip stat-ok">✓ ${ok_n} exitosos</span>
+    ${err_n ? `<span class="stat-chip stat-err">✗ ${err_n} con error</span>` : ''}`;
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td><span class="badge ${r.ok ? 'badge-ok' : 'badge-err'}">${r.ok ? '✓ OK' : '✗ Error'}</span></td>
+      <td>${r.usuario}</td>
+      <td style="color:var(--muted);font-size:.65rem;max-width:280px;overflow:hidden;text-overflow:ellipsis;">${r.dn || '—'}</td>
+      <td>${r.error ? `<span class="err-msg">${r.error}</span>` : '<span style="color:var(--success)">Contraseña actualizada</span>'}</td>
+    </tr>`).join('');
+
+  card.style.display = 'block';
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+verificarSesion();
+</script>
+</body>
+</html>

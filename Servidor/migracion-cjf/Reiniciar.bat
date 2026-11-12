@@ -1,0 +1,6 @@
+@echo off
+echo Liberando puerto 8080...
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr :8080') do taskkill /F /PID %%a 2>nul
+timeout /t 1 >nul
+echo Iniciando servidor...
+python servidor.py

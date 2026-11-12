@@ -1,0 +1,1130 @@
+{
+ "arp": [
+  {
+   "address": "10.1.110.77",
+   "age": "26",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.ea31",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.105",
+   "age": "5",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f09f.fcd9.7110",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.138",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dbe.7ed8",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.140",
+   "age": "1",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.fb55",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.148",
+   "age": "3",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.ea9f",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.161",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.f8f2",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.162",
+   "age": "108",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f09f.fce5.598d",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.193",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.f201",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.194",
+   "age": "25",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "c414.3c8b.93cc",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.195",
+   "age": "12",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.eaf5",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.196",
+   "age": "14",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dae.3034",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.197",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8800",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.198",
+   "age": "7",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db0.2547",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.199",
+   "age": "14",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "00e0.4c68.004b",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.200",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8d7d",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.202",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db6.9770",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.203",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc7.fdcb",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.204",
+   "age": "13",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.e3ed",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.205",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8de6",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.215",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db4.7674",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.110.232",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "9c2d.cdee.fd58",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.0",
+   "age": "6",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.f4a6",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.14",
+   "age": "4",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db4.765f",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.22",
+   "age": "19",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "0800.4e10.ffd5",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.36",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db6.dd93",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.37",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db4.73e0",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.39",
+   "age": "27",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "5017.ff76.a7b4",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.41",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.e8dd",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.44",
+   "age": "1",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0daa.caa1",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.61",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "94c6.9126.67e5",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.69",
+   "age": "1",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.fde6",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.74",
+   "age": "91",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "6019.2900.b0b0",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.75",
+   "age": "2",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.faad",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.79",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "94c6.9127.1386",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.95",
+   "age": "3",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8bb2",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.96",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db4.762a",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.98",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "6019.292f.e08f",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.111",
+   "age": "3",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db3.e6e9",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.113",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "20e1.5d9f.5abf",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.119",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "001a.64a3.baba",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.131",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8939",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.134",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db7.ce74",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.148",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0db4.71cc",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.174",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "1803.73b7.a788",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.190",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f4a8.0dc6.8c7c",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.201",
+   "age": "128",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "ccd8.c1b5.79d0",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.202",
+   "age": "229",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f09e.6342.3650",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.203",
+   "age": "218",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f09e.6342.2cd0",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.1.111.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan500",
+   "mac_address": "f09e.6322.7550",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.60.6.1",
+   "age": "11",
+   "flags": "-",
+   "interface": "Vlan60",
+   "mac_address": "0017.fc13.9f6a",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.60.6.2",
+   "age": "2",
+   "flags": "-",
+   "interface": "Vlan60",
+   "mac_address": "0017.fc13.9f6b",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.60.6.66",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.60.6.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan60",
+   "mac_address": "f09e.6322.7544",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.4",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.5",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.7",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.10",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.12",
+   "age": "0",
+   "flags": "-",
+   "interface": "-",
+   "mac_address": "Incomplete",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.30",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "94dd.f890.7e02",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.31",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "aca8.8e7c.92c8",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.32",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "94dd.f890.7e06",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.33",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "94dd.f894.0dae",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.34",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "94dd.f894.0db9",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.50",
+   "age": "40",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "90e4.b024.26f3",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.51",
+   "age": "147",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "90e4.b024.26c3",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.52",
+   "age": "94",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "90e4.b024.776a",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.53",
+   "age": "11",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "90e4.b024.76f6",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.70.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan100",
+   "mac_address": "f09e.6322.7551",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.72.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan705",
+   "mac_address": "f09e.6322.7574",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.76.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan707",
+   "mac_address": "f09e.6322.754f",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.95.100.9",
+   "age": "23",
+   "flags": "-",
+   "interface": "GigabitEthernet1/0/1",
+   "mac_address": "6879.0926.dc40",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.95.100.10",
+   "age": "-",
+   "flags": "-",
+   "interface": "GigabitEthernet1/0/1",
+   "mac_address": "f09e.6322.7564",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.2",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "d0dc.2c50.09d2",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.8",
+   "age": "144",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "64e9.502e.391c",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.10",
+   "age": "20",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "5017.ff76.a50c",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.11",
+   "age": "26",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "5017.ff76.792c",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.12",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.8f6b",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.15",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.90a8",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.17",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.9606",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.20",
+   "age": "37",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "c414.3c8b.a587",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.23",
+   "age": "71",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "64e9.502e.35cd",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.24",
+   "age": "193",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.8c26",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.26",
+   "age": "31",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "c414.3c8b.950b",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.27",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "9c54.169f.225b",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.28",
+   "age": "9",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.2d3e",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.33",
+   "age": "131",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "64e9.502e.3845",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.35",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "0cd5.d39f.ac31",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.37",
+   "age": "14",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "5017.ff76.a758",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.40",
+   "age": "48",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.8bce",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.41",
+   "age": "15",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.8dab",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.42",
+   "age": "31",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "64e9.502e.38ba",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.44",
+   "age": "2",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.8e3e",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.45",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.95b1",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.46",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "0cd5.d39f.6ee8",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.47",
+   "age": "2",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.95d7",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.48",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.95bf",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.49",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "c02c.17a4.bf1f",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.50",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "bc8d.1f3e.6d96",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.54",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "e8bc.e474.ec81",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.56",
+   "age": "13",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "5017.ff76.7b88",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.57",
+   "age": "14",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "5ca4.8a99.43a1",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.58",
+   "age": "28",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "ece1.a9ab.71ef",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.70",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.914d",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.71",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.912e",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.85",
+   "age": "173",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "885a.9202.a3d8",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.118",
+   "age": "146",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "f8c6.5048.7793",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.128",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "f8c6.5048.7799",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.129",
+   "age": "146",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.9092",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.132",
+   "age": "146",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "0cd5.d39f.ac44",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.133",
+   "age": "36",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "34db.fdcd.297d",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.136",
+   "age": "146",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.95aa",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.139",
+   "age": "11",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "c414.3c8b.19db",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.140",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "18f9.35b6.95aa",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.141",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "f8c6.5048.7793",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.142",
+   "age": "145",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "0cd5.d39f.ac44",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.110.143",
+   "age": "1",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "0cd5.d39f.ac44",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.111.192",
+   "age": "16",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "c414.3c8b.b156",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.141.111.200",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan300",
+   "mac_address": "f09e.6322.7547",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.159.5.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan400",
+   "mac_address": "f09e.6322.7552",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.171.4.1",
+   "age": "0",
+   "flags": "-",
+   "interface": "Vlan702",
+   "mac_address": "003a.7d9f.3154",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.171.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan702",
+   "mac_address": "f09e.6322.757a",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.172.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan700",
+   "mac_address": "f09e.6322.755c",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.173.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan703",
+   "mac_address": "f09e.6322.756a",
+   "protocol": "Internet",
+   "type": "ARPA"
+  },
+  {
+   "address": "10.174.4.254",
+   "age": "-",
+   "flags": "-",
+   "interface": "Vlan701",
+   "mac_address": "f09e.6322.7573",
+   "protocol": "Internet",
+   "type": "ARPA"
+  }
+ ],
+ "core": [
+  {
+   "equipo": "CORE",
+   "fabricante": "CISCO",
+   "hostname": "306_LAN_ALMACENAPB_MDF_SW_CORE_DHCP",
+   "ip": "10.1.111.254",
+   "modelo": "WS-C3850-48F-S",
+   "serie": "FOC1832X00S"
+  }
+ ]
+}
