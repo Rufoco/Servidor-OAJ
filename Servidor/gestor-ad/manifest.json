@@ -1,0 +1,25 @@
+{
+  "name": "Gestor Active Directory",
+  "short_name": "Gestor AD",
+  "description": "Gestión de usuarios CJF / OAJ / TDJ",
+  "start_url": "/gestor-ad/",
+  "scope": "/gestor-ad/",
+  "display": "standalone",
+  "background_color": "#0f1117",
+  "theme_color": "#4f8ef7",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/gestor-ad/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/gestor-ad/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

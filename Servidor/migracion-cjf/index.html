@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Migración de Usuarios · OAJ</title>
+<meta name="theme-color" content="#4f8ef7">
+<style>
+:root{--bg:#0f1117;--surface:#181c24;--surface2:#1e2330;--border:#2a2f3d;--text:#e2e6f0;--muted:#8891a8;--faint:#4a5168;--primary:#4f8ef7;--primary-h:#3a7aed;--primary-hl:rgba(79,142,247,.13);--success:#3ecf8e;--success-hl:rgba(62,207,142,.13);--warn:#f59e0b;--warn-hl:rgba(245,158,11,.13);--error:#f56565;--error-hl:rgba(245,101,101,.13);--r:8px;--rl:14px;--sh:0 4px 24px rgba(0,0,0,.45);--t:160ms cubic-bezier(.16,1,.3,1)}
+[data-theme=light]{--bg:#f5f6fa;--surface:#fff;--surface2:#f0f2f7;--border:#dde1ed;--text:#1a1f2e;--muted:#5a637a;--faint:#a0a8be;--primary:#2563eb;--primary-h:#1d4ed8;--primary-hl:rgba(37,99,235,.1);--success:#059669;--success-hl:rgba(5,150,105,.1);--warn:#d97706;--warn-hl:rgba(217,119,6,.1);--error:#dc2626;--error-hl:rgba(220,38,38,.1);--sh:0 4px 24px rgba(0,0,0,.1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+input,textarea{font:inherit;color:inherit;background:none}
+button,input,textarea{transition:background var(--t),color var(--t),border-color var(--t),box-shadow var(--t)}
+
+#lo{position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.lcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:36px 40px;width:100%;max-width:380px;box-shadow:var(--sh)}
+.llogo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.llogo-txt h1{font-size:17px;font-weight:700;line-height:1.2}
+.llogo-txt p{font-size:12px;color:var(--muted);margin-top:2px}
+.dtabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:var(--surface2);border-radius:var(--r);padding:4px;margin-bottom:20px}
+.dtab{padding:8px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted);text-align:center}
+.dtab.on[data-d=cjf]{background:#4f8ef7;color:#fff}
+.dtab.on[data-d=oaj]{background:#3ecf8e;color:#fff}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.li{width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-size:14px;outline:none}
+.li:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl)}
+.lbtn{width:100%;padding:11px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:14px;font-weight:600;margin-top:6px}
+.lbtn:hover{background:var(--primary-h)}
+.lbtn:disabled{opacity:.6;cursor:not-allowed}
+.lerr{background:var(--error-hl);border:1px solid var(--error);color:var(--error);border-radius:var(--r);padding:10px 12px;font-size:13px;margin-bottom:14px;display:none}
+.pwrap{position:relative}
+.pwrap .li{padding-right:38px}
+.ptgl{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.ptgl:hover{color:var(--text)}
+
+#app{display:none;flex-direction:column;min-height:100dvh}
+.hdr{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100}
+.hlogo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;flex:1}
+.hsub{font-size:12px;font-weight:500;color:var(--muted);font-family:Consolas,monospace}
+.husr{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:5px 11px;font-size:13px}
+.udot{width:8px;height:8px;border-radius:50%;background:#3ecf8e;flex-shrink:0}
+.blout{padding:5px 10px;background:var(--error-hl);border:1px solid var(--error);color:var(--error);border-radius:var(--r);font-size:12px;font-weight:600}
+.blout:hover{background:var(--error);color:#fff}
+.btheme{padding:6px;border-radius:var(--r);color:var(--muted)}
+.btheme:hover{background:var(--surface2);color:var(--text)}
+.bportal{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.bportal:hover{color:var(--text);border-color:var(--primary)}
+
+.dp{width:100%;max-width:1200px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:20px}
+.ucard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.uch{padding:16px 24px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.uch h2{font-size:15px;font-weight:700}
+.ucb{padding:20px 24px}
+.slbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;display:block}
+.ta{width:100%;min-height:200px;resize:vertical;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-family:Consolas,'JetBrains Mono',monospace;font-size:13px;line-height:1.7;outline:none;color:var(--text)}
+.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl)}
+.tafoot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:var(--muted);font-size:12px;gap:12px}
+.agrid{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.ba{padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;border:1px solid;display:inline-flex;align-items:center;gap:7px}
+.ba:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+.ba-r{background:var(--primary-hl);border-color:var(--primary);color:var(--primary)}
+.ba-r:hover{background:var(--primary);color:#fff}
+.ba-u{background:var(--success-hl);border-color:var(--success);color:var(--success)}
+.ba-u:hover{background:var(--success);color:#fff}
+.ba-g{background:var(--surface2);border-color:var(--border);color:var(--text)}
+.ba-g:hover{border-color:var(--primary)}
+
+.strow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.stbadge{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.stbadge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.bok{background:var(--success-hl);color:var(--success)}
+.boff{background:var(--error-hl);color:var(--error)}
+.bwrn{background:var(--warn-hl);color:var(--warn)}
+.bmut{background:var(--surface2);color:var(--muted)}
+.bprim{background:var(--primary-hl);color:var(--primary)}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;display:inline-block}
+
+.notice{padding:10px 14px;border-radius:var(--r);font-size:13px;border:1px solid;margin-bottom:10px}
+.n-warn{background:var(--warn-hl);border-color:var(--warn);color:var(--warn)}
+.n-err{background:var(--error-hl);border-color:var(--error);color:var(--error)}
+
+.prog{display:none;margin-bottom:14px}
+.prog-t{height:6px;background:var(--surface2);border-radius:20px;overflow:hidden}
+.prog-f{height:100%;width:0;background:var(--primary);border-radius:20px;transition:width .3s ease}
+.prog-l{font-size:12px;color:var(--primary);margin-top:6px}
+
+.twrap2{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:10px 14px;background:var(--surface2);font-size:11px;font-weight:700;color:var(--muted);text-align:left;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--surface2)}
+.cu{font-family:Consolas,monospace;color:var(--primary);font-size:12px}
+.cu small{display:block;color:var(--muted);font-size:10px;font-family:'Segoe UI',system-ui,sans-serif}
+.cm{color:var(--muted)}
+.rok td:first-child{border-left:3px solid var(--success)}
+.rerr td:first-child{border-left:3px solid var(--error)}
+.rdis td:first-child{border-left:3px solid var(--warn)}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+@media(max-width:900px){table{min-width:860px}}
+@media(max-width:768px){
+ .hdr{padding:0 12px;gap:8px}.hlogo{font-size:13px}.hsub{display:none}.husr{display:none}
+ .bportal .bptxt{display:none}.bportal{padding:6px 9px}
+ .dp{padding:12px;gap:12px}.uch,.ucb{padding:14px 16px}
+ .agrid{flex-direction:column}.ba{width:100%;justify-content:center}
+ .tafoot{flex-direction:column;align-items:flex-start}
+ .lcard{border-radius:var(--rl) var(--rl) 0 0;padding:28px 20px 36px;max-width:100%}#lo{align-items:flex-end}
+}
+</style>
+</head>
+<body>
+
+<div id="lo">
+ <div class="lcard">
+  <div class="llogo">
+   <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+    <rect width="38" height="38" rx="10" fill="#1e2330"/>
+    <circle cx="19" cy="13" r="5" stroke="#4f8ef7" stroke-width="2"/>
+    <path d="M10 30c0-4.97 4.03-9 9-9s9 4.03 9 9" stroke="#4f8ef7" stroke-width="2" stroke-linecap="round"/>
+    <path d="M25 22l2.5 2.5L32 20" stroke="#3ecf8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+   </svg>
+   <div class="llogo-txt"><h1>Migraci&oacute;n de Usuarios</h1><p>&Oacute;rgano de Administraci&oacute;n Judicial</p></div>
+  </div>
+  <div id="lerr" class="lerr"></div>
+  <div class="dtabs">
+   <button class="dtab on" data-d="cjf" type="button">&#11044; CJF</button>
+   <button class="dtab" data-d="oaj" type="button">&#11044; OAJ</button>
+  </div>
+  <div class="lf"><label>Usuario de red</label><input id="lu" class="li" type="text" placeholder="Ej: acorreab" autocomplete="username" spellcheck="false"></div>
+  <div class="lf"><label>Contrase&ntilde;a</label>
+   <div class="pwrap">
+    <input id="lp" class="li" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="current-password">
+    <button class="ptgl" id="ptgl" tabindex="-1" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+   </div>
+  </div>
+  <button class="lbtn" id="lbtn" type="button">Iniciar sesi&oacute;n</button>
+ </div>
+</div>
+
+<div id="app">
+ <header class="hdr">
+  <div class="hlogo">
+   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+   Migraci&oacute;n de Usuarios <span class="hsub" id="db-info-text">Active Directory &mdash; CJF en tiempo real</span>
+  </div>
+  <a class="bportal" href="/DGTI_Zapopan/" title="Volver al portal DGTI">&larr; <span class="bptxt">Portal DGTI</span></a>
+  <div class="husr"><span class="udot"></span><span id="husr">&#8212;</span></div>
+  <button class="blout" id="blout" type="button">Cerrar sesi&oacute;n</button>
+  <button class="btheme" id="theme-toggle" type="button" title="Cambiar tema"></button>
+ </header>
+
+ <main class="dp">
+  <section class="ucard">
+   <div class="uch"><h2>Lista de usuarios a migrar</h2></div>
+   <div class="ucb">
+    <label class="slbl" for="user-list">Cuentas o expedientes &mdash; uno por l&iacute;nea</label>
+    <textarea id="user-list" class="ta" placeholder="civegav&#10;jlopezm&#10;123456&#10;rrodriguez&#10;…" spellcheck="false"></textarea>
+    <div class="tafoot"><span>Pega directo desde Excel, Notepad o cualquier fuente. Puedes mezclar nombres de cuenta y n&uacute;meros de expediente.</span><span id="input-count"></span></div>
+    <div class="agrid">
+     <button class="ba ba-r" id="btn-generar" type="button">Generar lista</button>
+     <button class="ba ba-g" id="btn-limpiar" type="button">Limpiar</button>
+    </div>
+   </div>
+  </section>
+
+  <section class="ucard" id="card-result" style="display:none">
+   <div class="uch">
+    <h2>Vista previa</h2>
+    <div class="agrid" style="margin:0">
+     <button class="ba ba-r" id="btn-m365" type="button" style="display:none">Recargar M365</button>
+     <button class="ba ba-u" id="btn-xls" type="button">Exportar Excel</button>
+    </div>
+   </div>
+   <div class="ucb">
+    <div class="prog" id="m365-progress"><div class="prog-t"><div class="prog-f" id="m365-fill"></div></div><div class="prog-l" id="m365-label"></div></div>
+    <div id="notices"></div>
+    <div class="strow" id="chips"></div>
+    <div class="twrap2">
+     <table>
+      <thead><tr><th>Usuario</th><th>Expediente</th><th>Nombre</th><th>Apellido</th><th>Correo</th><th>Cargo</th><th>Departamento</th><th>Estado AD</th><th>M365</th></tr></thead>
+      <tbody id="tbody"></tbody>
+     </table>
+    </div>
+   </div>
+  </section>
+ </main>
+</div>
+
+<script src="js/xlsx.full.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

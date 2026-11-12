@@ -1,0 +1,2 @@
+cd /d "D:\Usuarios\acorreab\Documentos\Servidor\migracion-cjf"
+python servidor.py

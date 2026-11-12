@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DGTI Zapopan — Portal de Herramientas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Variables */
+:root,[data-theme="light"]{
+--bg:#f0f2f5;--surface:#ffffff;--surface-2:#f8f9fb;--surface-off:#eef0f4;
+--border:#dde1e8;--divider:#e8ebf0;--text:#1a1f2e;--muted:#5a6170;--faint:#9aa0ad;--inverse:#ffffff;
+--primary:#1a4480;--primary-h:#143568;--primary-hl:#dce6f4;
+--success:#2d7a3a;--success-hl:#daf0dd;
+--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+--xs:clamp(.75rem,.70rem + .25vw,.875rem);--sm:clamp(.875rem,.80rem + .35vw,1rem);
+--base:clamp(1rem,.95rem + .25vw,1.125rem);
+--s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;--s6:1.5rem;--s8:2rem;--s10:2.5rem;
+--r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+--sh-sm:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 12px rgba(0,0,0,.10);--sh-lg:0 8px 24px rgba(0,0,0,.12);
+--tr:180ms cubic-bezier(.16,1,.3,1);}
+[data-theme="dark"]{
+--bg:#0f1117;--surface:#161b27;--surface-2:#1c2130;--surface-off:#1a1f2c;
+--border:#2a3140;--divider:#222838;--text:#e2e5ec;--muted:#7a8496;--faint:#4a5160;--inverse:#0f1117;
+--primary:#5b8dd4;--primary-h:#3a6fbe;--primary-hl:#1c2a40;
+--success:#4caf63;--success-hl:#1a3020;
+--sh-sm:0 1px 3px rgba(0,0,0,.30);--sh-md:0 4px 12px rgba(0,0,0,.40);--sh-lg:0 8px 24px rgba(0,0,0,.50);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+body{min-height:100dvh;font-family:var(--font);font-size:var(--sm);color:var(--text);background:var(--bg);transition:background var(--tr),color var(--tr);}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
+a{text-decoration:none;color:inherit;}
+
+/* Topbar */
+.topbar{background:var(--primary);color:var(--inverse);padding:var(--s3) var(--s6);
+display:flex;align-items:center;justify-content:space-between;gap:var(--s4);
+box-shadow:var(--sh-md);position:sticky;top:0;z-index:100;}
+.brand{display:flex;align-items:center;gap:var(--s3);}
+.brand-icon{width:36px;height:36px;background:rgba(255,255,255,.18);border-radius:var(--r-lg);
+display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.brand-title{font-size:var(--sm);font-weight:700;letter-spacing:-.01em;}
+.brand-sub{font-size:var(--xs);opacity:.75;}
+.topbar-right{display:flex;align-items:center;gap:var(--s3);}
+.pill{display:flex;align-items:center;gap:var(--s2);font-size:var(--xs);font-family:var(--mono);
+background:rgba(255,255,255,.15);padding:var(--s2) var(--s3);border-radius:var(--r-full);opacity:.9;}
+.dot{width:7px;height:7px;border-radius:50%;background:#4cdb6e;flex-shrink:0;}
+.btn-icon{padding:var(--s2);border-radius:var(--r-md);opacity:.85;
+transition:opacity var(--tr),background var(--tr);display:flex;align-items:center;}
+.btn-icon:hover{opacity:1;background:rgba(255,255,255,.15);}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--primary) 0,var(--primary-h) 100%);
+color:var(--inverse);padding:var(--s10) var(--s6);text-align:center;}
+.hero-eyebrow{font-size:var(--xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:var(--s3);}
+.hero-title{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;letter-spacing:-.02em;margin-bottom:var(--s3);}
+.hero-sub{font-size:var(--sm);opacity:.8;max-width:480px;margin:0 auto;line-height:1.6;}
+
+/* Main layout */
+.main{max-width:1000px;margin:0 auto;padding:var(--s8) var(--s6);}
+.section-label{font-size:var(--xs);font-weight:700;color:var(--muted);text-transform:uppercase;
+letter-spacing:.08em;margin-bottom:var(--s5);display:flex;align-items:center;gap:var(--s3);}
+.section-label::after{content:'';flex:1;height:1px;background:var(--divider);}
+
+/* Tool grid */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s5);}
+
+/* Tool card */
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);
+box-shadow:var(--sh-sm);padding:var(--s6);display:flex;flex-direction:column;gap:var(--s4);
+cursor:pointer;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);
+position:relative;overflow:hidden;}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+background:var(--card-accent,var(--primary));border-radius:var(--r-xl) var(--r-xl) 0 0;}
+.tool-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--card-accent,var(--primary));}
+.tool-card:active{transform:translateY(-1px);}
+.tool-icon{width:48px;height:48px;border-radius:var(--r-lg);
+background:var(--card-hl,var(--primary-hl));color:var(--card-accent,var(--primary));
+display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.tool-info{display:flex;flex-direction:column;gap:var(--s1);flex:1;}
+.tool-name{font-size:var(--sm);font-weight:700;letter-spacing:-.01em;}
+.tool-desc{font-size:var(--xs);color:var(--muted);line-height:1.55;}
+.tool-footer{display:flex;align-items:center;justify-content:space-between;
+padding-top:var(--s3);border-top:1px solid var(--divider);}
+.tool-tag{display:inline-flex;align-items:center;padding:.15rem var(--s2);
+background:var(--card-hl,var(--primary-hl));color:var(--card-accent,var(--primary));
+border-radius:var(--r-full);font-size:.65rem;font-weight:600;font-family:var(--mono);}
+.tool-arrow{color:var(--card-accent,var(--primary));opacity:.7;font-size:1.1rem;
+transition:transform var(--tr),opacity var(--tr);}
+.tool-card:hover .tool-arrow{transform:translateX(4px);opacity:1;}
+
+/* Coming soon card */
+.tool-card.coming-soon{opacity:.55;cursor:default;pointer-events:none;}
+.badge-soon{display:inline-flex;align-items:center;gap:var(--s1);padding:.15rem var(--s2);
+border-radius:var(--r-full);background:var(--surface-off);color:var(--muted);
+font-size:.6rem;font-weight:600;font-family:var(--mono);border:1px solid var(--border);}
+
+/* Footer */
+.footer{text-align:center;padding:var(--s8) var(--s6) var(--s6);font-size:var(--xs);color:var(--faint);border-top:1px solid var(--divider);}
+
+/* Responsive */
+@media(max-width:600px){
+.main{padding:var(--s6) var(--s4);}
+.hero{padding:var(--s8) var(--s4);}
+.topbar{padding:var(--s3) var(--s4);}
+.pill{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">⚙️</div>
+    <div>
+      <div class="brand-title">DGTI Zapopan</div>
+      <div class="brand-sub">Portal de Herramientas Internas</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn-icon" id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+      <!-- icono se inserta por JS -->
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Órgano de Administración Judicial</div>
+  <h1 class="hero-title">Portal DGTI</h1>
+  <p class="hero-sub">Accede a las herramientas de administración y gestión del departamento desde un solo lugar.</p>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="section-label">Herramientas disponibles</div>
+  <div class="tool-grid">
+
+    <!-- Migración CJF -->
+    <a href="/migracion-cjf/" class="tool-card" style="--card-accent:#1a4480;--card-hl:#dce6f4">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+          <circle cx="7" cy="8" r="3"/>
+        </svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Migración Usuarios CJF</div>
+        <div class="tool-desc">Consulta usuarios en Active Directory y verifica licencias de Microsoft 365 en tiempo real.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">AD · M365</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Gestor AD -->
+    <a href="/gestor-ad/" class="tool-card" style="--card-accent:#2d7a3a;--card-hl:#daf0dd">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          <polyline points="16 11 18 13 22 9"/>
+        </svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Gestor AD</div>
+        <div class="tool-desc">Busca usuarios en CJF u OAJ, consulta su estado, restablece contraseñas, desbloquea cuentas y visualiza grupos en Active Directory.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">AD · CJF · OAJ</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Reset Masivo de Contraseñas -->
+    <a href="/reset-masivo/" class="tool-card" style="--card-accent:#b01c2e;--card-hl:#fce8ea">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Reset Masivo de Contraseñas</div>
+        <div class="tool-desc">Restablece contraseñas de múltiples cuentas en CJF u OAJ de forma masiva. Permite forzar cambio en el siguiente inicio de sesión.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">AD · CJF · OAJ</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Escaneo de Impresoras -->
+    <a href="/escaneo-impresoras/" class="tool-card" style="--card-accent:#6b3fa0;--card-hl:#ece3f6">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9V2h12v7"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Escaneo de Impresoras</div>
+        <div class="tool-desc">Escanea VLANs, rangos o listas de IPs por SNMP y exporta a Excel el modelo, número de serie, nombre en red e IP de cada impresora.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">SNMP · VLANs · IPs</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Inventario de Equipos -->
+    <a href="/inventario-equipos/" class="tool-card" style="--card-accent:#0e7c86;--card-hl:#d9f0f2">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Inventario de Equipos</div>
+        <div class="tool-desc">Consulta los equipos registrados en CJF y OAJ por sede u OU de Jalisco y revisa cuántos tienen Windows 10 o Windows 11.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">AD · Windows 10/11 · Sedes</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Localizador de IP -->
+    <a href="/localizador-ip/" class="tool-card" style="--card-accent:#c2650a;--card-hl:#fdebd0">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Localizador de IP</div>
+        <div class="tool-desc">Ubica en qué switch y puerto está conectada una IP: cruza el ARP del CORE con el estatus de puertos y muestra MAC, VLAN, velocidad y estado.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">ARP · Switches · Puertos</span>
+        <span class="tool-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Herramientas de Red -->
+    <a href="/gestor-puertos/" class="tool-card" style="--card-accent:#3b4cc0;--card-hl:#e3e6f8">
+      <div class="tool-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg>
+      </div>
+      <div class="tool-info">
+        <div class="tool-name">Gestor de Puertos</div>
+        <div class="tool-desc">Consulta puertos libres y el estado de las interfaces por sitio y switch. Revisa serie, VLAN y los valores originales de Último Input y Output; filtra y exporta los resultados a CSV.</div>
+      </div>
+      <div class="tool-footer">
+        <span class="tool-tag">Puertos &middot; VLAN &middot; Switches</span>
+        <span class="tool-arrow">&rarr;</span>
+      </div>
+    </a>
+
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  DGTI Zapopan &mdash; Órgano de Administración Judicial &mdash; Uso interno
+</footer>
+
+<script>
+const Theme = (() => {
+  const root = document.documentElement;
+  const btn  = document.getElementById('theme-toggle');
+  let dark = matchMedia('(prefers-color-scheme:dark)').matches;
+  const SUN  = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+  const MOON = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+  function apply() {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.innerHTML = dark ? SUN : MOON;
+  }
+  btn.addEventListener('click', () => { dark = !dark; apply(); });
+  apply();
+})();
+</script>
+</body>
+</html>

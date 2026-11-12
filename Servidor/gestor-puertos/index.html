@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/compartido/auth.js"></script>
+<title>Gestor de Puertos · DGTI Zapopan</title>
+<meta name="theme-color" content="#4f8ef7">
+<style>
+
+:root{--bg:#0f1117;--surface:#181c24;--surface2:#1e2330;--border:#2a2f3d;--text:#e2e6f0;--muted:#8891a8;--faint:#4a5168;--primary:#4f8ef7;--primary-h:#3a7aed;--primary-hl:rgba(79,142,247,.13);--success:#3ecf8e;--success-hl:rgba(62,207,142,.13);--warn:#f59e0b;--warn-hl:rgba(245,158,11,.13);--error:#f56565;--error-hl:rgba(245,101,101,.13);--r:8px;--rl:14px;--sh:0 4px 24px rgba(0,0,0,.45);--t:160ms cubic-bezier(.16,1,.3,1)}
+[data-theme=light]{--bg:#f5f6fa;--surface:#fff;--surface2:#f0f2f7;--border:#dde1ed;--text:#1a1f2e;--muted:#5a637a;--faint:#a0a8be;--primary:#2563eb;--primary-h:#1d4ed8;--primary-hl:rgba(37,99,235,.1);--success:#059669;--success-hl:rgba(5,150,105,.1);--warn:#d97706;--warn-hl:rgba(217,119,6,.1);--error:#dc2626;--error-hl:rgba(220,38,38,.1);--sh:0 4px 24px rgba(0,0,0,.1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--text);min-height:100dvh;line-height:1.5}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+input{font:inherit;color:inherit;background:none}
+button,input{transition:background var(--t),color var(--t),border-color var(--t),box-shadow var(--t)}
+
+/* ── Login overlay ── */
+#lo{position:fixed;inset:0;z-index:900;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.lcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:36px 40px;width:100%;max-width:380px;box-shadow:var(--sh)}
+.llogo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.llogo-txt h1{font-size:17px;font-weight:700;line-height:1.2}
+.llogo-txt p{font-size:12px;color:var(--muted);margin-top:2px}
+.dtabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:var(--surface2);border-radius:var(--r);padding:4px;margin-bottom:20px}
+.dtab{padding:8px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted);text-align:center;transition:background var(--t),color var(--t)}
+.dtab.on[data-d=cjf]{background:#4f8ef7;color:#fff}
+.dtab.on[data-d=oaj]{background:#3ecf8e;color:#fff}
+.dtab.on[data-d=tdj]{background:#a86fdf;color:#fff}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.li{width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-size:14px;outline:none}
+.li:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl)}
+.lbtn{width:100%;padding:11px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:14px;font-weight:600;margin-top:6px}
+.lbtn:hover{background:var(--primary-h)}
+.lbtn:disabled{opacity:.6;cursor:not-allowed}
+.lerr{background:var(--error-hl);border:1px solid var(--error);color:var(--error);border-radius:var(--r);padding:10px 12px;font-size:13px;margin-bottom:14px;display:none}
+.pwrap{position:relative}
+.pwrap .li,.pwrap .mi{padding-right:38px}
+.ptgl{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.ptgl:hover{color:var(--text)}
+
+/* ── App ── */
+#app{display:none;flex-direction:column;min-height:100dvh}
+.hdr{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;position:sticky;top:0;z-index:100}
+.hlogo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;flex:1}
+.husr{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:5px 11px;font-size:13px}
+.udot{width:8px;height:8px;border-radius:50%;background:#3ecf8e;flex-shrink:0}
+.blout{padding:5px 10px;background:var(--error-hl);border:1px solid var(--error);color:var(--error);border-radius:var(--r);font-size:12px;font-weight:600}
+.blout:hover{background:var(--error);color:#fff}
+.btheme{padding:6px;border-radius:var(--r);color:var(--muted)}
+.btheme:hover{background:var(--surface2);color:var(--text)}
+
+.main{display:flex;flex:1;overflow:hidden}
+.sb{width:300px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface)}
+.sbs{padding:14px 16px}
+.sbs+.sbs{border-top:1px solid var(--border)}
+.slbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px}
+
+.dtabs2{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:var(--surface2);border-radius:var(--r);padding:3px}
+.dtab2{padding:7px;border-radius:6px;font-size:13px;font-weight:600;color:var(--muted);text-align:center;transition:background var(--t),color var(--t)}
+.dtab2.on[data-d=cjf]{background:#4f8ef7;color:#fff}
+.dtab2.on[data-d=oaj]{background:#3ecf8e;color:#fff}
+.dtab2.on[data-d=tdj]{background:#a86fdf;color:#fff}
+
+.swrap{position:relative;margin-top:10px}
+.swrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);width:15px;height:15px;pointer-events:none}
+.si{width:100%;padding:9px 12px 9px 32px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-size:14px;outline:none;color:var(--text)}
+.si:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl)}
+.bbus{width:100%;margin-top:8px;padding:9px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px}
+.bbus:hover{background:var(--primary-h)}
+.bbus:disabled{opacity:.6;cursor:not-allowed}
+
+.reclist{display:flex;flex-wrap:wrap;gap:6px}
+.crec{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.crec:hover{border-color:var(--primary);color:var(--primary)}
+.cdom{font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px}
+.cdom.cjf{background:rgba(79,142,247,.2);color:#4f8ef7}
+.cdom.oaj{background:rgba(62,207,142,.2);color:#3ecf8e}
+.cdom.tdj{background:rgba(168,109,223,.2);color:#a86fdf}
+
+.rlist{flex:1;overflow-y:auto;padding:8px}
+.ri{padding:10px 12px;border-radius:var(--r);cursor:pointer;border:1px solid transparent;margin-bottom:4px;transition:background var(--t),border-color var(--t)}
+.ri:hover{background:var(--surface2)}
+.ri.on{background:var(--primary-hl);border-color:var(--primary)}
+.ri-n{font-size:13px;font-weight:600}
+.ri-u{font-size:12px;color:var(--muted);margin-top:2px}
+.ri-b{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.bok{background:var(--success-hl);color:var(--success)}
+.boff{background:var(--error-hl);color:var(--error)}
+.bwrn{background:var(--warn-hl);color:var(--warn)}
+.bmut{background:var(--surface2);color:var(--muted)}
+
+.dp{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:12px;text-align:center;min-height:300px}
+
+.ucard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.uch{padding:20px 24px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
+.uav{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0}
+.uav.cjf{background:rgba(79,142,247,.15);color:#4f8ef7}
+.uav.oaj{background:rgba(62,207,142,.15);color:#3ecf8e}
+.uav.tdj{background:rgba(168,109,223,.15);color:#a86fdf}
+.uim h2{font-size:17px;font-weight:700;line-height:1.2}
+.uim p{font-size:13px;color:var(--muted);margin-top:3px}
+.ucb{padding:20px 24px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.df label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+.df .dv{font-size:13px;margin-top:4px;word-break:break-word}
+.df .dv.em{color:var(--faint);font-style:italic}
+.strow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 24px;border-top:1px solid var(--border)}
+.stbadge{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.stbadge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.acard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:20px 24px}
+.atit{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:14px;letter-spacing:.4px;text-transform:uppercase}
+.agrid{display:flex;flex-wrap:wrap;gap:10px}
+.ba{padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;border:1px solid;display:inline-flex;align-items:center;gap:7px}
+.ba-r{background:var(--primary-hl);border-color:var(--primary);color:var(--primary)}
+.ba-r:hover{background:var(--primary);color:#fff}
+.ba-u{background:var(--success-hl);border-color:var(--success);color:var(--success)}
+.ba-u:hover{background:var(--success);color:#fff}
+.ba-u:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.ba-f{background:var(--warn-hl);border-color:var(--warn);color:var(--warn)}
+.ba-f:hover{background:var(--warn);color:#000}
+
+.glist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.gc{padding:3px 10px;border-radius:20px;font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
+
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:flex;align-items:center;justify-content:center}
+.mo{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:28px;width:100%;max-width:360px;box-shadow:var(--sh)}
+.mo h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.mo p{font-size:13px;color:var(--muted);margin-bottom:18px}
+.mof{margin-bottom:14px}
+.mof label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.mi{width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);outline:none;font-size:14px;color:var(--text)}
+.mi:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl)}
+.mobtns{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+.bcan{padding:9px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600}
+.bcan:hover{border-color:var(--primary)}
+.bcon{padding:9px 16px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:13px;font-weight:600}
+.bcon:hover{background:var(--primary-h)}
+.bcon:disabled{opacity:.6;cursor:not-allowed}
+
+.twrap{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 16px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:var(--sh);animation:tIn .2s ease;max-width:340px}
+.toast.ok{background:#3ecf8e;color:#fff}
+.toast.err{background:#f56565;color:#fff}
+@keyframes tIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+.spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — MÓVIL
+═══════════════════════════════════════ */
+
+/* Botón hamburguesa (solo móvil) */
+.hmbg{display:none;padding:6px;border-radius:var(--r);color:var(--muted);flex-shrink:0}
+.hmbg:hover{background:var(--surface2);color:var(--text)}
+
+/* Overlay oscuro cuando sidebar está abierto en móvil */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:49}
+
+@media(max-width:768px){
+  /* ── Header ── */
+  .hdr{padding:0 12px;gap:8px}
+  .hlogo{font-size:13px}
+  .hlogo svg{width:18px;height:18px}
+  .husr{display:none}          /* se esconde en móvil, ya sale en el sidebar */
+  .hmbg{display:flex}
+
+  /* ── Layout: sidebar deslizable ── */
+  .main{position:relative;overflow:visible}
+  .sb{
+    position:fixed;
+    top:52px;left:0;bottom:0;
+    width:290px;
+    transform:translateX(-100%);
+    transition:transform var(--t);
+    z-index:50;
+    overflow-y:auto;
+    box-shadow:var(--sh);
+  }
+  .sb.open{transform:translateX(0)}
+  .sb-overlay.open{display:block}
+
+  /* ── Panel detalle ── */
+  .dp{padding:12px;gap:12px}
+
+  /* ── Card usuario ── */
+  .uch{padding:14px 16px;gap:12px}
+  .uav{width:42px;height:42px;font-size:16px}
+  .uim h2{font-size:15px}
+  .ucb{padding:14px 16px}
+  .dgrid{grid-template-columns:1fr 1fr;gap:10px}
+  .strow{padding:10px 16px;gap:6px}
+
+  /* ── Acciones ── */
+  .agrid{flex-direction:column}
+  .ba{width:100%;justify-content:center}
+  .acard{padding:14px 16px}
+
+  /* ── Modales ── */
+  .mov{align-items:flex-end}
+  .mo{border-radius:var(--rl) var(--rl) 0 0;max-width:100%;width:100%;padding:24px 20px 32px}
+
+  /* ── Login card ── */
+  .lcard{border-radius:var(--rl) var(--rl) 0 0;padding:28px 20px 36px;max-width:100%}
+  #lo{align-items:flex-end}
+
+  /* ── Toast ── */
+  .twrap{bottom:12px;right:12px;left:12px}
+  .toast{max-width:100%}
+
+  /* ── Textos ── */
+  .slbl{font-size:10px}
+  .dtab2{font-size:12px;padding:7px 4px}
+}
+
+@media(max-width:400px){
+  .dgrid{grid-template-columns:1fr}
+  .dtabs{grid-template-columns:1fr 1fr}
+}
+
+.bportal{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background var(--t),color var(--t),border-color var(--t)}
+.bportal:hover{color:var(--text);border-color:var(--primary)}
+@media(max-width:768px){.bportal .bptxt{display:none}.bportal{padding:6px 9px}}
+
+/* ── Gestor de Puertos: añadidos sobre el CSS de Gestor AD ── */
+[hidden]{display:none!important}
+#app{display:flex;height:100dvh;min-height:0}
+.main,.sb,.rlist{min-height:0}
+.sb{overflow:hidden}
+.swrap{margin-top:0}
+.swrap+.bbus{margin-top:8px}
+.crow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px;overflow-wrap:anywhere;min-height:1.2em}
+.hint.sitename{color:var(--primary);font-weight:600}
+.ri{display:flex;gap:10px;align-items:flex-start}
+.ri input{width:16px;height:16px;margin-top:2px;accent-color:var(--primary);flex-shrink:0}
+.ri-body{min-width:0;flex:1}
+.ri-n{overflow-wrap:anywhere}
+.ri-u{overflow-wrap:anywhere}
+.ri-u.mono,.mono{font-family:Consolas,'Cascadia Mono',monospace}
+.sbs.act{border-top:1px solid var(--border)}
+.sbs.act small{display:block;font-size:11px;color:var(--muted);margin-top:8px}
+.uav.cjf{font-size:17px;overflow:hidden}
+.toolrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toolrow .swrap{flex:1;min-width:220px}
+.toprow{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.toprow .dtabs2{grid-template-columns:repeat(3,auto);width:fit-content}
+.toprow .dtab2{padding:7px 14px}
+.agrid.row{margin:0}
+.extras{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-top:12px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.extras .mof{margin:0;min-width:150px;flex:1}
+.extras .chk{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.extras .chk input{accent-color:var(--primary);width:16px;height:16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.count{font-size:12px;color:var(--muted);margin:12px 0}
+.tbl-wrap{overflow:auto;max-height:60dvh;border:1px solid var(--border);border-radius:var(--r)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--surface2);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;white-space:nowrap}
+.tbl th button{font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit}
+.tbl th button:hover{color:var(--primary)}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.tbl tbody tr:hover{background:var(--surface2)}
+.tbl td.sw{max-width:250px}
+.tbl td.sw span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbl small{display:block;color:var(--muted);font-size:11px}
+.bver{padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);font-size:12px;font-weight:600}
+.bver:hover{border-color:var(--primary);color:var(--primary)}
+.note{font-size:12px;color:var(--muted);margin-top:14px}
+.nw{background:var(--warn-hl);border:1px solid var(--warn);color:var(--warn);border-radius:var(--r);padding:10px 12px;font-size:13px;overflow-wrap:anywhere}
+.ne{background:var(--error-hl);border:1px solid var(--error);color:var(--error);border-radius:var(--r);padding:10px 12px;font-size:13px;overflow-wrap:anywhere}
+#alerts{display:flex;flex-direction:column;gap:8px}
+#alerts:empty{display:none}
+.spin.dk{border-color:rgba(128,138,160,.35);border-top-color:var(--primary);margin-right:8px}
+.mo.wide{max-width:640px;max-height:88dvh;overflow:auto}
+.mo.wide h3{display:flex;gap:8px;flex-wrap:wrap}
+.dsec{margin-top:22px}
+.dsec:first-of-type{margin-top:0}
+.df .dv.big{font-size:18px;font-weight:700;font-family:Consolas,'Cascadia Mono',monospace}
+.dbox{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+pre{font:11px/1.5 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+details>summary{cursor:pointer;color:var(--primary);font-size:12px;margin-top:12px}
+.empty-t{padding:50px 16px;text-align:center;color:var(--muted)}
+@media(max-width:768px){.toprow .dtabs2{grid-template-columns:repeat(3,1fr);width:100%}.tbl{min-width:680px}.agrid.row{flex-direction:row}.agrid.row .ba{width:auto}}
+</style>
+</head>
+<body>
+<div id="app">
+ <header class="hdr">
+  <button class="hmbg" id="mobileMenu" aria-label="Menú"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <div class="hlogo">
+   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg>
+   Gestor de Puertos
+  </div>
+  <a class="bportal" href="/DGTI_Zapopan/" title="Volver al portal DGTI">&larr; <span class="bptxt">Portal DGTI</span></a>
+  <div class="husr" id="userchip" hidden><span class="udot"></span><span id="husr">&#8212;</span></div>
+  <button class="blout" id="logout" hidden>Cerrar sesi&oacute;n</button>
+  <button class="btheme" id="theme" title="Cambiar tema" aria-label="Cambiar tema"><svg id="tico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+ </header>
+ <div class="main">
+  <div class="sb-overlay" id="sb-ov"></div>
+  <aside class="sb" id="sb">
+   <div class="sbs">
+    <div class="slbl">Sitio</div>
+    <div class="swrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input id="site" class="si" type="text" list="sites" placeholder="Nombre, ID o Prisma ID" autocomplete="off"><datalist id="sites"></datalist></div>
+    <button class="bbus" id="load" title="Carga el catálogo de switches, sin escanear"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/></svg>Cargar switches</button>
+    <div class="hint sitename" id="siteName"></div><div class="hint" id="catalogStatus" role="status"></div>
+   </div>
+   <div class="sbs" id="recsec" hidden><div class="slbl">Recientes</div><div class="reclist" id="reclst"></div></div>
+   <div class="sbs">
+    <div class="slbl">Switches</div>
+    <div class="swrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input id="swSearch" class="si" type="text" placeholder="Nombre, IP, marca, modelo o serie"></div>
+    <div class="crow"><button class="crec" data-select="access">Acceso</button><button class="crec" data-select="all">Todos</button><button class="crec" data-select="none">Ninguno</button></div>
+    <div class="hint" id="selection">Carga un sitio para comenzar.</div>
+   </div>
+   <div class="rlist" id="switches"></div>
+   <div class="sbs act"><button class="bbus" id="scan" disabled>Consultar switches</button><small>Consulta Estatus y Puertos Libres. No cambia la configuración de los equipos.</small><div class="hint" id="sideStatus" role="status"></div></div>
+  </aside>
+  <main class="dp" id="dp">
+   <div id="alerts" role="status"></div>
+   <div class="acard" id="progress" hidden aria-live="polite"></div>
+   <div class="empty" id="empty"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg><p>Elige un sitio, marca los switches y pulsa Consultar</p></div>
+   <div id="results" hidden style="display:flex;flex-direction:column;gap:20px">
+    <div class="ucard" id="hero"></div>
+    <div class="ucard"><div class="ucb">
+     <div class="toprow"><div class="dtabs2" id="tabs"><button class="dtab2 on" data-d="cjf" data-tab="free">Puertos libres</button><button class="dtab2" data-d="cjf" data-tab="all">Todos los puertos</button><button class="dtab2" data-d="cjf" data-tab="summary">Resumen por switch</button></div>
+      <div class="agrid row"><button class="ba ba-r" id="refresh">&#128260; Actualizar datos</button><button class="ba ba-u" id="export">&#128229; Exportar CSV</button></div></div>
+     <div class="toolrow"><div class="swrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input id="query" class="si" type="text" placeholder="Buscar puerto, switch, serie, VLAN, descripción, MAC o IP…"></div><button class="bcan" id="moreFilters" aria-expanded="false">Más filtros</button><button class="bcan" id="clear">Limpiar filtros</button></div>
+     <div class="extras" id="extras" hidden>
+      <div class="mof"><label for="filterSwitch">Switch</label><select id="filterSwitch" class="mi"></select></div>
+      <div class="mof"><label for="filterState">Estado</label><select id="filterState" class="mi"><option value="">Todos</option><option value="sin_enlace">Sin enlace</option><option value="deshabilitado">Deshabilitado</option><option value="activo">Activo</option><option value="error">Con error</option><option value="otro">Otro</option></select></div>
+      <div class="mof"><label for="filterVlan">VLAN</label><select id="filterVlan" class="mi"></select></div>
+      <div class="mof"><label for="filterBrand">Marca</label><select id="filterBrand" class="mi"></select></div>
+      <label class="chk"><input type="checkbox" id="hideTrunk">Ocultar posibles troncales</label></div>
+     <div class="chips" id="chips"></div><div class="count" id="count"></div><div class="tbl-wrap" id="table"></div><div id="more" style="margin-top:12px"></div>
+     <p class="note">“Puertos libres” reproduce la lista del dashboard; puede incluir sin enlace y deshabilitados (el estado se ve en cada fila). Último Input y Output se muestran sin estimaciones ni fechas del historial. La descripción no cambia la clasificación. Disabled no autoriza a habilitar el puerto.</p>
+    </div></div>
+   </div>
+  </main>
+ </div>
+</div>
+<div class="mov" id="shade" hidden><div class="mo wide" id="modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle" tabindex="-1"><h3 id="detailTitle"></h3><p id="detailSub"></p><div id="detail"></div><div class="mobtns"><button class="bcan" id="close">Cerrar</button><button class="bcon" id="copyDetail">Copiar switch y puerto</button></div></div></div>
+<div class="twrap" id="tw"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), API='/gestor-puertos/api';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const E={activo:'Activo',sin_enlace:'Sin enlace',deshabilitado:'Deshabilitado',error:'Con error',otro:'Otro'};
+const MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+const SUN='<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+let sites=[], switches=[], selected=new Set(), loadedId='', catalogBusy=false, busy=false, data=null, tab='free', sortKey='switch', asc=true, limit=150, view=[], focusBefore=null, activePort=null, scanInput=null;
+const filters={q:'',sw:'',vlan:'',brand:'',state:'',trunk:false};
+function toast(msg,t){const el=document.createElement('div');el.className='toast '+(t||'ok');el.textContent=msg;$('tw').appendChild(el);setTimeout(()=>el.remove(),4000)}
+let dark=true;try{dark=(localStorage.getItem('loc-theme')||'dark')!=='light'}catch(e){}
+function applyTheme(){document.documentElement.setAttribute('data-theme',dark?'dark':'light');$('tico').innerHTML=dark?MOON:SUN;try{localStorage.setItem('loc-theme',dark?'dark':'light')}catch(e){}}
+$('theme').onclick=()=>{dark=!dark;applyTheme()};applyTheme();
+function tgSB(){const open=$('sb').classList.toggle('open');$('sb-ov').classList.toggle('open',open)}
+function closeSB(){if(innerWidth>768)return;$('sb').classList.remove('open');$('sb-ov').classList.remove('open')}
+$('mobileMenu').onclick=tgSB;$('sb-ov').onclick=tgSB;
+async function api(path){const r=await fetch(API+path);let d;try{d=await r.json()}catch(e){throw Error('Respuesta no válida del servidor (HTTP '+r.status+').')}
+if(!r.ok)throw Error(r.status===401?'Sesión vencida o no iniciada. Vuelve a autenticarte y reintenta.':d.msg||d.error||'HTTP '+r.status);return d}
+(async()=>{try{const r=await fetch('/api/session');if(!r.ok)return;const d=await r.json();if(d&&d.ok&&d.display){$('husr').textContent=d.display;$('userchip').hidden=false;$('logout').hidden=false}}catch(e){}})();
+$('logout').onclick=async()=>{try{await fetch('/api/logout',{method:'POST'})}catch(e){}try{sessionStorage.removeItem('g_tok')}catch(e){}location.reload()};
+function findSite(t){t=t.trim().toLowerCase();return sites.find(s=>String(s.id).toLowerCase()===t||String(s.prisma_id||'').toLowerCase()===t||String(s.nombre_oficial||'').toLowerCase()===t)}
+function lock(){$('site').disabled=busy||catalogBusy;$('load').disabled=busy||catalogBusy;$('scan').disabled=busy||catalogBusy||!selected.size||!loadedId;$('refresh').disabled=busy||catalogBusy;document.querySelectorAll('[data-select],#switches input').forEach(e=>e.disabled=busy||catalogBusy)}
+function selectionText(){$('selection').textContent=selected.size+' de '+switches.length+' seleccionados';$('scan').innerHTML=busy?'<span class="spin"></span> Consultando…':'Consultar '+selected.size+' switch'+(selected.size===1?'':'es');lock()}
+function drawSwitches(){const q=$('swSearch').value.trim().toLowerCase();const list=switches.map((s,i)=>({s,i})).filter(({s})=>[s.hostname,s.ip,s.marca,s.modelo,s.serie].join(' ').toLowerCase().includes(q));
+$('switches').innerHTML=list.map(({s,i})=>{const on=selected.has(String(s.ip));return `<label class="ri${on?' on':''}"><input type="checkbox" data-sw="${i}" ${on?'checked':''}><div class="ri-body"><div class="ri-n">${esc(s.hostname||s.ip)} ${s.core?'<span class="badge bmut">CORE</span>':''}</div><div class="ri-u">Marca: ${esc(s.marca||'No informada')} · Modelo: ${esc(s.modelo||'No informado')}</div><div class="ri-u mono">IP: ${esc(s.ip||'No informada')}</div><div class="ri-u mono">Serie: ${esc(s.serie||'No informada')}</div></div></label>`}).join('')||'<div class="hint" style="padding:8px">No hay switches que coincidan.</div>';selectionText()}
+$('swSearch').oninput=drawSwitches;
+$('switches').onchange=e=>{if(!e.target.matches('[data-sw]'))return;const s=switches[+e.target.dataset.sw],ip=String(s.ip);if(e.target.checked)selected.add(ip);else selected.delete(ip);e.target.closest('.ri').classList.toggle('on',e.target.checked);selectionText()};
+document.querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>{const mode=b.dataset.select;selected=new Set(switches.filter(s=>mode==='all'||mode==='access'&&!s.core).map(s=>String(s.ip)));drawSwitches()});
+function recents(){try{return JSON.parse(localStorage.getItem('red-rec')||'[]')}catch(e){return[]}}
+function addRecent(site){try{const r=recents().filter(x=>String(x.id)!==String(site.id));r.unshift({id:String(site.id),name:site.nombre_oficial||''});localStorage.setItem('red-rec',JSON.stringify(r.slice(0,6)))}catch(e){}drawRecents()}
+function drawRecents(){const r=recents();$('recsec').hidden=!r.length;$('reclst').innerHTML=r.map(x=>`<span class="crec" data-rec="${esc(x.id)}" title="${esc(x.name)}"><span class="cdom cjf">${esc(x.id)}</span>${esc(String(x.name).replace(/^\d+\s*/,'').slice(0,22))}</span>`).join('')}
+$('reclst').onclick=e=>{const c=e.target.closest('[data-rec]');if(c&&!busy&&!catalogBusy){$('site').value=c.dataset.rec;loadSite()}};
+async function loadSite(){if(busy||catalogBusy)return;const site=findSite($('site').value);if(!site){$('catalogStatus').textContent=sites.length?'Elige un nombre, ID o Prisma ID del catálogo.':'Catálogo aún no disponible. Recarga la página o revisa la sesión.';return}
+if(loadedId===String(site.id))return;catalogBusy=true;lock();$('catalogStatus').textContent='Cargando catálogo, sin escanear…';switches=[];selected.clear();loadedId='';drawSwitches();
+try{const d=await api('/switches?sitio='+encodeURIComponent(site.id));if(!d.ok)throw Error(d.msg||'No se pudo cargar el sitio.');switches=Array.isArray(d.switches)?d.switches:[];loadedId=String(site.id);$('site').value=loadedId;$('siteName').textContent=site.nombre_oficial||'';try{localStorage.setItem('loc-sitio',loadedId)}catch(e){}addRecent(site);selected=new Set(switches.filter(s=>!s.core).map(s=>String(s.ip)));$('catalogStatus').textContent=switches.length+' switches en el catálogo.';drawSwitches()}
+catch(e){$('catalogStatus').textContent=e.message}finally{catalogBusy=false;lock()}}
+$('load').onclick=loadSite;$('site').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();loadSite()}};
+$('site').onchange=loadSite;
+$('site').oninput=()=>{if(loadedId&&$('site').value!==loadedId){loadedId='';selected.clear();switches=[];$('siteName').textContent='';drawSwitches()}};
+drawRecents();
+(async()=>{try{const l=await api('/sitios');if(!Array.isArray(l))throw Error('El servidor no devolvió un catálogo de sitios.');sites=l;$('sites').innerHTML=l.map(s=>`<option value="${esc(s.id)}">${esc(s.nombre_oficial)} · Prisma ${esc(s.prisma_id||'')}</option><option value="${esc(s.nombre_oficial)}">ID ${esc(s.id)}</option>`).join('');$('catalogStatus').textContent='Busca y selecciona un sitio.';let id='';try{id=localStorage.getItem('loc-sitio')||''}catch(e){}if(id&&findSite(id)){$('site').value=id;await loadSite()}}catch(e){$('catalogStatus').textContent=e.message}})();
+$('scan').onclick=()=>scan(false);$('refresh').onclick=()=>scan(true);
+async function scan(force){if(busy||catalogBusy)return;const input=force?scanInput:(loadedId&&selected.size?{site:loadedId,ips:[...selected]}:null);if(!input){toast('Primero selecciona sitio y switches.','err');return}
+busy=true;lock();selectionText();$('progress').hidden=false;$('alerts').innerHTML='';const start=Date.now();
+const tick=()=>{$('progress').innerHTML='<span class="spin dk"></span><b>Consultando '+input.ips.length+' switch'+(input.ips.length===1?'':'es')+'…</b> <span class="hint">Estatus de Puertos + Puertos Libres. Puede tardar varios minutos. '+Math.floor((Date.now()-start)/1000)+' s · No cierres esta consulta.</span>'};tick();const timer=setInterval(tick,1000);
+try{const d=await api('/puertos?sitio='+encodeURIComponent(input.site)+'&switches='+encodeURIComponent(input.ips.join(','))+'&libres=1'+(force?'&refrescar=1':''));if(!d.ok)throw Error((d.msg||'No se recibieron puertos.')+(d.errores?.length?' '+JSON.stringify(d.errores):''));data=d;scanInput={site:input.site,ips:[...input.ips]};closeDetail();reset(false);$('empty').hidden=true;$('results').hidden=false;renderHeader();render();$('sideStatus').textContent='Consulta terminada. Filtrar no vuelve a escanear.';closeSB()}
+catch(e){$('alerts').innerHTML='<div class="ne">'+esc(e.message)+(data?' Los resultados anteriores se conservan; no fueron actualizados.':'')+'</div>'}
+finally{clearInterval(timer);busy=false;$('progress').hidden=true;selectionText()}}
+function isFree(p){return p.l_en_lista===true}
+function rawInput(p){return p.ultimo_input_original!=null&&String(p.ultimo_input_original).trim()!==''?String(p.ultimo_input_original):'No informado'}
+function rawOutput(p){return p.ultimo_output_original!=null&&String(p.ultimo_output_original).trim()!==''?String(p.ultimo_output_original):'No informado'}
+function stateBadge(p){const c={activo:'bok',sin_enlace:'bwrn',deshabilitado:'bwrn',error:'boff'}[p.estado]||'bmut';return `<span class="badge ${c}" title="${esc(p.estatus)}">${esc(E[p.estado]||p.estatus||'No informado')}</span>`}
+function stamp(ts){return ts?new Date(ts*1000).toLocaleString('es-MX'):'No informada'}
+function renderHeader(){const P=data.puertos||[],S=data.switches||[],free=P.filter(isFree),sid=String(data.sitio.id),withData=S.filter(s=>s.total>0).length;
+const badges=[`<span class="stbadge ${withData===S.length?'bok':'bwrn'}">Switches con datos: ${withData} de ${S.length}</span>`,data.libres_ok?`<span class="stbadge bok">Puertos libres reportados: ${free.length}</span>`:`<span class="stbadge bwrn">Puertos Libres sin confirmar</span>`];
+if(data.libres_ok){const dis=free.filter(p=>p.estado==='deshabilitado').length;badges.push(`<span class="stbadge ${dis?'bwrn':'bmut'}">Deshabilitados entre los reportados: ${dis}</span>`)}
+$('hero').innerHTML=`<div class="uch"><div class="uav cjf">${esc(sid)}</div><div class="uim"><h2>${esc(data.sitio.nombre_oficial||'Sitio '+sid)}</h2><p>Sitio ${esc(sid)} · ${scanInput.ips.length} switch${scanInput.ips.length===1?'':'es'} seleccionados · Captura de Estatus: ${esc(stamp(data.edad))} · Puertos Libres: hora no informada por la API</p></div></div><div class="strow">${badges.join('')}</div>`;
+let notes=[...(data.avisos||[])];if(!data.libres_ok)notes.unshift('No hay una consulta confirmada de Puertos Libres. Una lista vacía no demuestra que no existan puertos libres.');if(data.errores?.length)notes.push('Errores reportados: '+JSON.stringify(data.errores));$('alerts').innerHTML=notes.map(n=>'<div class="nw">⚠ '+esc(n)+'</div>').join('');
+const options=(id,vals,all)=>$(id).innerHTML='<option value="">'+all+'</option>'+[...new Set(vals.filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'es',{numeric:true})).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+options('filterSwitch',P.map(p=>p.switch),'Todos');options('filterBrand',P.map(p=>p.marca),'Todas');options('filterVlan',P.flatMap(p=>String(p.vlan||'').split(/[,;\s]+/)),'Todas')}
+function reset(redraw=true){filters.q=filters.sw=filters.vlan=filters.brand=filters.state='';filters.trunk=false;$('query').value='';['filterSwitch','filterVlan','filterBrand','filterState'].forEach(id=>$(id).value='');$('hideTrunk').checked=false;limit=150;if(redraw)render()}
+$('clear').onclick=()=>reset();$('moreFilters').onclick=()=>{const x=$('extras');x.hidden=!x.hidden;$('moreFilters').setAttribute('aria-expanded',String(!x.hidden))};
+$('query').oninput=()=>{filters.q=$('query').value.trim();limit=150;render()};
+for(const [id,k] of [['filterSwitch','sw'],['filterVlan','vlan'],['filterBrand','brand'],['filterState','state']])$(id).onchange=()=>{filters[k]=$(id).value;limit=150;render()};
+$('hideTrunk').onchange=()=>{filters.trunk=$('hideTrunk').checked;limit=150;render()};
+$('tabs').onclick=e=>{const b=e.target.closest('[data-tab]');if(b){tab=b.dataset.tab;limit=150;render()}};
+function seconds(v){let s=String(v??'').trim().toLowerCase();if(!s||s==='no informado')return {group:2,value:0};if(s==='never'||s==='nunca')return {group:1,value:0};if(/^\d+:\d{2}:\d{2}$/.test(s)){const t=s.split(':').map(Number);return {group:0,value:t[0]*3600+t[1]*60+t[2]}}
+const parts=[...s.matchAll(/(\d+)\s*(years?|weeks?|days?|hours?|minutes?|seconds?|[ywdhms])/g)];if(!parts.length)return {group:2,value:0};const m={y:31536000,w:604800,d:86400,h:3600,m:60,s:1};return {group:0,value:parts.reduce((n,p)=>n+Number(p[1])*m[p[2][0]],0)}}
+function portCompare(a,b){return String(a??'').localeCompare(String(b??''),'es',{numeric:true,sensitivity:'base'})}
+function compare(a,b){if(sortKey==='input'){const aa=seconds(a.ultimo_input_original),bb=seconds(b.ultimo_input_original);return aa.group-bb.group||(asc?1:-1)*(aa.value-bb.value)||portCompare(a.puerto,b.puerto)}return (asc?1:-1)*portCompare(a[sortKey],b[sortKey])||portCompare(a.puerto,b.puerto)}
+function filtered(){return (data.puertos||[]).filter(p=>{if(tab==='free'&&!isFree(p))return false;if(filters.state&&p.estado!==filters.state)return false;if(filters.sw&&p.switch!==filters.sw)return false;if(filters.brand&&p.marca!==filters.brand)return false;if(filters.vlan&&!String(p.vlan||'').split(/[,;\s]+/).includes(filters.vlan))return false;if(filters.trunk&&p.troncal)return false;const text=[p.switch,p.switch_ip,p.puerto,p.marca,p.modelo,p.serie,p.vlan,p.descripcion,...(p.macs||[]),...(p.ips_host||[])].join(' ').toLowerCase();return !filters.q||text.includes(filters.q.toLowerCase())}).sort(compare)}
+function render(){if(!data)return;view=filtered();document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+const chips=[...(filters.q?[['q','Búsqueda: '+filters.q]]:[]),...(filters.sw?[['sw','Switch: '+filters.sw]]:[]),...(filters.state?[['state','Estado: '+E[filters.state]]]:[]),...(filters.vlan?[['vlan','VLAN: '+filters.vlan]]:[]),...(filters.brand?[['brand','Marca: '+filters.brand]]:[]),...(filters.trunk?[['trunk','Sin posibles troncales']]:[])];$('chips').innerHTML=chips.map(([k,v])=>`<span class="crec" data-clear="${k}">${esc(v)} ×</span>`).join('');
+$('export').innerHTML='&#128229; Exportar '+view.length+' puertos';$('export').disabled=!view.length;$('more').innerHTML='';
+if(tab==='summary'){renderSummary();return}
+$('count').textContent=view.length+' puertos · Ordena pulsando Switch, Serie, Puerto o Último Input · never y valores desconocidos se agrupan aparte.';
+const col=(label,key)=>`<th><button data-sort="${key}">${label}${sortKey===key?(asc?' ↑':' ↓'):''}</button></th>`;
+const rows=view.slice(0,limit);$('table').innerHTML='<table class="tbl"><thead><tr>'+col('Switch','switch')+col('Serie','serie')+col('Puerto','puerto')+'<th>Estado</th>'+col('Último Input','input')+'<th>VLAN</th><th>Detalle</th></tr></thead><tbody>'+rows.map((p,i)=>`<tr><td class="sw"><span title="${esc(p.switch)}">${esc(p.switch)}</span></td><td class="mono">${esc(p.serie||'No informada')}</td><td class="mono"><b>${esc(p.puerto)}</b></td><td>${stateBadge(p)}</td><td class="mono">${esc(rawInput(p))}</td><td class="mono">${esc(p.vlan||'—')}</td><td><button class="bver" data-detail="${i}" aria-label="Ver detalle de ${esc(p.puerto)}">Ver →</button></td></tr>`).join('')+(rows.length?'':`<tr><td colspan="7"><div class="empty-t">${tab==='free'&&!data.libres_ok?'Puertos Libres no está confirmado. Revisa los avisos o cambia a Todos los puertos.':'No hay coincidencias con esta vista y sus filtros.'}</div></td></tr>`)+'</tbody></table>';
+if(view.length>limit)$('more').innerHTML='<button class="bcan" id="showMore">Mostrar '+Math.min(150,view.length-limit)+' más</button>';if($('showMore'))$('showMore').onclick=()=>{limit+=150;render()}}
+function renderSummary(){const P=view,list=(data.switches||[]).filter(s=>(!filters.sw||s.hostname===filters.sw)&&(!filters.brand||s.marca===filters.brand));$('count').textContent='Puertos que cumplen los filtros actuales y total que devolvió el dashboard para cada switch.';
+$('table').innerHTML='<table class="tbl"><thead><tr><th>Switch</th><th>Identificación</th><th>Puertos (filtros / total)</th><th>En Puertos Libres</th><th>Sin enlace</th><th>Deshabilitados</th><th></th></tr></thead><tbody>'+list.map(s=>{const rows=P.filter(p=>p.switch===s.hostname);return `<tr><td>${esc(s.hostname)}<small class="mono">${esc(s.ip)}</small></td><td>${esc(s.marca||'Marca no informada')}<small>${esc(s.modelo||'Modelo no informado')}</small><small class="mono">Serie(s): ${esc(s.serie||'No informada')}</small></td><td>${rows.length} / ${s.total||0}${!s.total?'<small>Sin datos de interfaces</small>':''}</td><td>${data.libres_ok?rows.filter(isFree).length:'Sin confirmar'}</td><td>${rows.filter(p=>p.estado==='sin_enlace').length}</td><td>${rows.filter(p=>p.estado==='deshabilitado').length}</td><td><button class="bver" data-open-sw="${esc(s.hostname)}">Ver puertos</button></td></tr>`}).join('')+'</tbody></table>'}
+$('chips').onclick=e=>{const b=e.target.closest('[data-clear]');if(!b)return;const k=b.dataset.clear;filters[k]=k==='trunk'?false:'';$('query').value=filters.q;$('filterSwitch').value=filters.sw;$('filterVlan').value=filters.vlan;$('filterBrand').value=filters.brand;$('filterState').value=filters.state;$('hideTrunk').checked=filters.trunk;limit=150;render()};
+$('table').onclick=e=>{let b=e.target.closest('[data-sort]');if(b){asc=sortKey===b.dataset.sort?!asc:true;sortKey=b.dataset.sort;render();return}b=e.target.closest('[data-detail]');if(b){openDetail(view[Number(b.dataset.detail)],b);return}b=e.target.closest('[data-open-sw]');if(b){filters.sw=b.dataset.openSw;$('filterSwitch').value=filters.sw;tab='all';render()}};
+function df(a,b,big,mono){const v=b==null||b===''?'No informado':b;return `<div class="df"><label>${esc(a)}</label><div class="dv${big?' big':''}${mono&&!big?' mono':''}">${esc(v)}</div></div>`}
+function openDetail(p,el){activePort=p;focusBefore=el;$('detailTitle').innerHTML=esc(p.puerto)+' '+stateBadge(p);$('detailSub').textContent=p.switch+' · Serie '+(p.serie||'No informada');
+$('detail').innerHTML=`<div class="dsec"><div class="atit">Estado</div><span class="stbadge ${isFree(p)?'bok':'bmut'}">${isFree(p)?'Reportado en Puertos Libres':data.libres_ok?'No listado en Puertos Libres':'Puertos Libres sin confirmar'}</span><p class="note mono">${esc(p.estatus||'No informado')}</p></div>
+<div class="dsec"><div class="atit">Actividad · valores originales del dashboard</div><div class="dgrid">${df('Último Input',rawInput(p),true)}${df('Último Output',rawOutput(p),true)}</div><p class="note">No son fechas de nuestras consultas. Se conserva never si así lo devuelve el dashboard. Último Input no es una medición exacta del momento en que cayó el enlace.</p></div>
+<div class="dsec"><div class="atit">Switch</div><div class="dgrid">${df('Nombre completo',p.switch)}${df('Marca',p.marca)}${df('Modelo',p.modelo)}${df('IP',p.switch_ip,false,true)}${df('Serie de la fila del puerto',p.serie,false,true)}${df('Uptime del switch',p.uptime)}</div></div>
+<div class="dsec"><div class="atit">Configuración y conexiones</div><div class="dgrid">${df('VLAN',p.vlan,false,true)}${df('Modo',p.modo)}${df('Velocidad',p.speed)}${df('Dúplex',p.duplex)}${df('Tipo',p.tipo)}${df('Descripción (informativa)',p.descripcion)}${df('MAC',(p.macs||[]).join(', '),false,true)}${df('IP asociadas',(p.ips_host||[]).join(', '),false,true)}</div></div>
+<details><summary>Datos originales · Estatus de Puertos</summary><pre>${esc(JSON.stringify(p.crudo||{},null,2))}</pre></details><details><summary>Datos originales · Puertos Libres</summary><pre>${esc(JSON.stringify(p.crudo_libres||{},null,2))}</pre></details>`;
+$('shade').hidden=false;document.body.style.overflow='hidden';$('modal').focus()}
+function closeDetail(){$('shade').hidden=true;document.body.style.overflow='';activePort=null;if(focusBefore&&focusBefore.isConnected)focusBefore.focus()}
+$('close').onclick=closeDetail;$('shade').onclick=e=>{if(e.target===$('shade'))closeDetail()};
+document.addEventListener('keydown',e=>{if($('shade').hidden)return;if(e.key==='Escape')closeDetail();if(e.key==='Tab'){const a=[...$('modal').querySelectorAll('button,summary,input,select,a[href]')].filter(x=>x.getClientRects().length);if(!a.length)return;const first=a[0],last=a[a.length-1];if(e.shiftKey&&(document.activeElement===first||document.activeElement===$('modal'))){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+async function copy(t){try{await navigator.clipboard.writeText(t);toast('Copiado')}catch(e){const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();const ok=document.execCommand('copy');x.remove();toast(ok?'Copiado':'No se pudo copiar; selecciona el texto manualmente.',ok?'ok':'err')}}
+$('copyDetail').onclick=()=>{if(activePort)copy(activePort.switch+' · '+activePort.puerto+' · Serie '+(activePort.serie||'No informada')+' · '+(activePort.switch_ip||''))};
+$('export').onclick=()=>{const cols=['Sitio','Switch','Marca','Modelo','Serie','IP switch','Puerto','Estado','Reportado en Puertos Libres','Ultimo Input original','Ultimo Output original','VLAN','Modo','Velocidad','Duplex','Descripcion','MAC','IPs host'];const q=v=>{let t=String(v??'');if(/^[=+@\-]/.test(t))t="'"+t;return '"'+t.replace(/"/g,'""')+'"'};const lines=[cols.map(q).join(',')];for(const p of view)lines.push([data.sitio.nombre_oficial,p.switch,p.marca,p.modelo,p.serie,p.switch_ip,p.puerto,p.estatus,isFree(p)?'SI':data.libres_ok?'NO LISTADO':'SIN INFORMACION',rawInput(p),rawOutput(p),p.vlan,p.modo,p.speed,p.duplex,p.descripcion,(p.macs||[]).join(' '),(p.ips_host||[]).join(' ')].map(q).join(','));const url=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='puertos_'+data.sitio.id+'_'+tab+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+</script></body></html>

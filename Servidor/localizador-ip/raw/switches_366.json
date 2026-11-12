@@ -1,0 +1,1073 @@
+[
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PB_IDFPB_STK",
+  "ip": "10.3.121.190",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310HH / FJC2523121U"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1_TRPB_IMPRESORAS",
+  "ip": "10.3.121.17",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981353"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO1_IDF1_SW1",
+  "ip": "10.3.121.193",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJB2403G086"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO1_IDF1_SW2",
+  "ip": "10.3.121.192",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252312LZ"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1_TR1_IMPRESORAS_1",
+  "ip": "10.3.121.1",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783799"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO2_IDF2_STK",
+  "ip": "10.3.121.194",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252312FR / FJC25251XPH"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1TR2_IMPRESORAS_5",
+  "ip": "10.3.121.5",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981523"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO3_IDF3_STK",
+  "ip": "10.3.121.196",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311MJ / FJC25251XLL"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1TR3_IMPRESORAS_2",
+  "ip": "10.3.121.2",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783824"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO4_IDF4_SW1",
+  "ip": "10.3.121.198",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523109T"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO4_IDF4_SW2",
+  "ip": "10.3.121.199",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJB2403G085"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1TR4_IMPRESORAS_3",
+  "ip": "10.3.121.3",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783748"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX1PISO5_IDF5_STK",
+  "ip": "10.3.121.200",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252316T5 / FJC25251VBC"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X1TR5_IMPRESORAS_4",
+  "ip": "10.3.121.4",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783735"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PB_IDFPB_STK",
+  "ip": "10.3.121.185",
+  "modelo": "WS-C3850-48F-S / WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FCW2231C0GC / FOC2202L335"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO1_IDF1_STK",
+  "ip": "10.3.121.180",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523108G / FJC25251XKV"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X2_TR1_IMPRESORAS_6",
+  "ip": "10.3.121.6",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981766"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO2_IDF2_SW1",
+  "ip": "10.3.121.182",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252316YK"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO2_IDF2_SW2",
+  "ip": "10.3.121.183",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJB2403G081"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X2TR2_IMPRESORAS_7",
+  "ip": "10.3.121.7",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981502"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO3_IDF3_STK",
+  "ip": "10.3.121.184",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523108K / FJC25251XJE"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X2TR3_IMPRESORAS_8",
+  "ip": "10.3.121.8",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981409"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO4_IDF4_SW",
+  "ip": "10.3.121.186",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310J7"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X2TR4_IMPRESORAS_9",
+  "ip": "10.3.121.9",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981914"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX2PISO5_IDF5_STK",
+  "ip": "10.3.121.188",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310K7 / FJC25251XNP"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X2TR5_IMPRESORAS_11",
+  "ip": "10.3.121.11",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981354"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PB_IDFPB_STK",
+  "ip": "10.3.121.168",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311PJ / FJC262712QT"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PB_IDFPB_SW",
+  "ip": "10.3.121.169",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L1GS"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO1_IDF1_STK",
+  "ip": "10.3.121.170",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310KY / FJC25231211"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO2_IDF2_SW1",
+  "ip": "10.3.121.172",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311RD"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO2_IDF2_SW2",
+  "ip": "10.3.121.173",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2424X0R9"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X3TR2_IMPRESORAS_14",
+  "ip": "10.3.121.15",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981400"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO3_IDF3_SW1",
+  "ip": "10.3.121.174",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311TH"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO3_IDF3_SW2",
+  "ip": "10.3.121.175",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJB2403G08N"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X3_TR3_IMPRESORAS_13",
+  "ip": "10.3.121.14",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981371"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO4_IDF4_SW1",
+  "ip": "10.3.121.177",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJB2403G03F"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO4_IDF4_SW2",
+  "ip": "10.3.121.176",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252312EC"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X3TR4_IMPRESORAS_12",
+  "ip": "10.3.121.13",
+  "modelo": "OS6850E-48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "N0281004"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO5_IDF5_SW1",
+  "ip": "10.3.121.178",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25221EQ9"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX3PISO5_IDF5_SW2",
+  "ip": "10.3.121.179",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2010X02N"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X3TR5_IMPRESORAS_17",
+  "ip": "10.3.121.18",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981385"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO1_IDF1_STK",
+  "ip": "10.3.121.195",
+  "modelo": "WS-C3850-24P-S / WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FCW2424D02C / FOC2231L1CJ"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO1_IDF1_SW",
+  "ip": "10.3.121.158",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311U2"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO2_IDF2_STK",
+  "ip": "10.3.121.210",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523109J / FJC26261SGN"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X4TR2_IMPRESORAS_15",
+  "ip": "10.3.121.16",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P3980967"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO3_IDF3_STK",
+  "ip": "10.3.121.162",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC27331A5Z / FOC2432LBGH"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X4_TR3_IMPRESORAS_19",
+  "ip": "10.3.121.20",
+  "modelo": "OS6850-48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "K4286567"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO4_IDF4_SW1",
+  "ip": "10.3.121.164",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311V4"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO4_IDF4_SW2",
+  "ip": "10.3.121.165",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2424W0P8"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X4TR4_IMPRESORAS_18",
+  "ip": "10.3.121.19",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981366"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX4PISO5_IDF5_SW",
+  "ip": "10.3.121.166",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252316XK"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_X4TR5_IMPRESORAS",
+  "ip": "10.3.121.167",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783825"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX5PB_IDFPB_SW",
+  "ip": "10.3.121.22",
+  "modelo": "9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25251YFC"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX6PISO1_IDF1_SW",
+  "ip": "10.3.121.23",
+  "modelo": "9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25251YFS"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFX7PISO1_IDF1_SW",
+  "ip": "10.3.121.24",
+  "modelo": "9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25251YF5"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPB_IDFPB_STK",
+  "ip": "10.3.121.134",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25231091 / FJC27471AH0"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO1_IDF1_STK",
+  "ip": "10.3.121.136",
+  "modelo": "9300-48P / 9300-24P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310ET / FJC25251YMD / FJC26261SGT"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR1_IMPRESORAS",
+  "ip": "10.3.121.41",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981412"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO2_IDF2_STK",
+  "ip": "10.3.121.202",
+  "modelo": "9300-48P / 9300-24P / 9300-24P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311JG / FJC25251YFE / FJC262713W5 / FJC262712G3"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR2_IMPRESORAS",
+  "ip": "10.3.121.35",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981393"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO3_IDF3_STK",
+  "ip": "10.3.121.140",
+  "modelo": "9300-48P / 9300-24P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311WK / FJC262712HX / FJC26261SEL"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR3_IMPRESORAS",
+  "ip": "10.3.121.34",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981863"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO4_IDF4_STK",
+  "ip": "10.3.121.142",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311RV / FJC262712QM"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR4_IMPRESORAS",
+  "ip": "10.3.121.141",
+  "modelo": "OS6850-24",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "K3481779"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO5_IDF5_STK",
+  "ip": "10.3.121.203",
+  "modelo": "WS-C3850-48F-S / WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FCW2143D09G / FCW2202F1CS"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO5_IDF5_SW",
+  "ip": "10.3.121.147",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC27471AAV"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO6_IDF6_STK",
+  "ip": "10.3.121.144",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2511LJBK / FJC27471AJJ"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR6_IMPRESORAS",
+  "ip": "10.3.121.43",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981356"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO7_IDF7_STK",
+  "ip": "10.3.121.146",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC27471AJF / FJC252311N0"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR7_IMPRESORAS",
+  "ip": "10.3.121.39",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P0983959"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXAPISO8_IDF8_STK",
+  "ip": "10.3.121.99",
+  "modelo": "9300-48P / 9300-24P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC24501X7B / FJC24451Q77 / FJC27471AC9"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_XATR8_IMPRESORAS",
+  "ip": "10.3.121.40",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981856"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPB_MDF_SW1",
+  "ip": "10.3.121.120",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25231E3A"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPB_MDF_SW2",
+  "ip": "10.3.121.121",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L2DM"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPB_MDF_SW_CORE",
+  "ip": "10.3.121.249",
+  "modelo": "N9K-C9508",
+  "plataforma": "nx-os",
+  "rol": "Acceso",
+  "serie": "FGE19040SA8"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO1_IDF1_SW1",
+  "ip": "10.3.121.122",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310G0"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO1_IDF1_SW2",
+  "ip": "10.3.121.240",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC1832U13K"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO2_IDF2_SW1",
+  "ip": "10.3.121.124",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2328U08P"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO2_IDF2_SW2",
+  "ip": "10.3.121.125",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC1742X0FX"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO3_IDF3_STK",
+  "ip": "10.3.121.126",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311KE / FJC25251YFH"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_EDIFXBPISO3_IDF3_IMPRESORAS",
+  "ip": "10.3.121.127",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783782"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO4_IDF4_STK",
+  "ip": "10.3.121.86",
+  "modelo": "WS-C3850-48F-S / WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L25N / FOC2231L2DU"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO5_IDF5_STK",
+  "ip": "10.3.121.128",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311KT / FJC252316KQ"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO6_IDF6_STK",
+  "ip": "10.3.121.130",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310BU / FJC252316Y2"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXBPISO7_IDF7_STK",
+  "ip": "10.3.121.132",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523108R / FJC252310A0"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPB_IDFPB_STK",
+  "ip": "10.3.121.106",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311LR / FJC25251XGW"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO1_IDF1_STK",
+  "ip": "10.3.121.108",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310PA / FJC25251XP8"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO1_IDF1_SW",
+  "ip": "10.3.121.205",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L1JW"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO2_IDF2_STK",
+  "ip": "10.3.121.110",
+  "modelo": "9300-48P / 9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523109U / FJC252311NC"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO3_IDF3_STK",
+  "ip": "10.3.121.112",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25221TPA / FJC25251XL1"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_IMPRESORAS_30",
+  "ip": "10.3.121.36",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981428"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO4_IDF4_STK",
+  "ip": "10.3.121.114",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25221U48 / FJC252516KF"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XCTR4_IMPRESORAS",
+  "ip": "10.3.121.115",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783752"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO5_IDF5_STK",
+  "ip": "10.3.121.88",
+  "modelo": "WS-C3850-48F-S / WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC1829X0FY / FOC1841X1KL"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO6_IDF6_STK",
+  "ip": "10.3.121.116",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252312F3 / FJC25251XC9"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO6_IDF6_SW",
+  "ip": "10.3.121.150",
+  "modelo": "9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25251XMC"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO7_IDF7_SW1",
+  "ip": "10.3.121.123",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L0WE"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXCPISO7_IDF7_SW2",
+  "ip": "10.3.121.28",
+  "modelo": "9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25251XFW"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPB_IDFPB_SW1",
+  "ip": "10.3.121.118",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311UP"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPB_IDFPB_SW2",
+  "ip": "10.3.121.119",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FCW2010F00P"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTRPB_IMPRESORA_26",
+  "ip": "10.3.121.32",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981785"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO1_IDF1_STK",
+  "ip": "10.3.121.92",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC2523112T / FJC25251XFV"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR1_IMPRESORAS_25",
+  "ip": "10.3.121.31",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981391"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO2_IDF2_STK",
+  "ip": "10.3.121.94",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252311T6 / FJC25251XKK"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR2_IMPRESORAS_24",
+  "ip": "10.3.121.29",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981398"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO3_IDF3_STK",
+  "ip": "10.3.121.96",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310P4 / FJC25251XPR"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR3_IMPRESORAS_23",
+  "ip": "10.3.121.27",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981370"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO4_IDF4_SW1",
+  "ip": "10.3.121.89",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC1910U03U"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO4_IDF4_SW2",
+  "ip": "10.3.121.97",
+  "modelo": "WS-C3850-48F-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231X0DU"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO5_IDF5_STK",
+  "ip": "10.3.121.98",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252310P5 / FJC25251XN9"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR5_IMPRESORAS_22",
+  "ip": "10.3.121.26",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981408"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO6_IDF6_STK",
+  "ip": "10.3.121.100",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC27321FHZ / FJC28301A24"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR6_IMPRESORAS_20",
+  "ip": "10.3.121.21",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981425"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO7_IDF7_SW1",
+  "ip": "10.3.121.102",
+  "modelo": "9300-48P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC25221UV9"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO7_IDF7_SW2",
+  "ip": "10.3.121.103",
+  "modelo": "WS-C3850-24P-S",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FOC2231L0EP"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_EDIFXDPISO7_IDF7",
+  "ip": "10.3.121.37",
+  "modelo": "OS6850E-P24X",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2783726"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_XDTR7_IMPRESORAS_21",
+  "ip": "10.3.121.25",
+  "modelo": "OS6850E-P48",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P2981399"
+ },
+ {
+  "fabricante": "CISCO",
+  "hostname": "366_LAN_EDIFXDPISO8_IDF8_STK",
+  "ip": "10.3.121.104",
+  "modelo": "9300-48P / 9300-24P",
+  "plataforma": "ios-xe",
+  "rol": "Acceso",
+  "serie": "FJC252316YH / FJC25251XHJ"
+ },
+ {
+  "fabricante": "ALCATEL-LUCENT",
+  "hostname": "366_LAN_EDIFXDP8_IDF8_IMPRESORAS",
+  "ip": "10.3.121.105",
+  "modelo": "OS6850E-P24",
+  "plataforma": "oas",
+  "rol": "Acceso",
+  "serie": "P4485218"
+ }
+]
