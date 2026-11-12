@@ -2,6 +2,7 @@
 # servidor.py
 # pip install ldap3 | python servidor.py
 
+import re
 import subprocess
 import threading
 import csv
@@ -36,7 +37,7 @@ INVENTARIO_CSS = os.path.join(INVENTARIO_DIR, "css", "styles.css")
 INVENTARIO_JS = os.path.join(INVENTARIO_DIR, "js", "app.js")
 
 if INVENTARIO_DIR not in sys.path:
-    sys.path.insert(0, INVENTARIO_DIR)
+    sys.path.append(INVENTARIO_DIR)
 
 try:
     from inventario_backend import consultar_inventario
@@ -51,7 +52,7 @@ except Exception as _exc_inventario:
 # --- Modulo Localizador IP (Dashboard de Red) ---
 LOCALIZADOR_DIR = os.path.join(SERVE_DIR, "localizador-ip")
 if LOCALIZADOR_DIR not in sys.path:
-    sys.path.insert(0, LOCALIZADOR_DIR)
+    sys.path.append(LOCALIZADOR_DIR)
 try:
     import dashboard_red
 except Exception as _exc_dash:
@@ -61,7 +62,7 @@ except Exception as _exc_dash:
 # --- Suite Herramientas de Red ---
 RED_DIR = os.path.join(SERVE_DIR, "gestor-puertos")
 if RED_DIR not in sys.path:
-    sys.path.insert(0, RED_DIR)
+    sys.path.append(RED_DIR)
 try:
     import red_suite
 except Exception as _exc_red:
@@ -69,11 +70,12 @@ except Exception as _exc_red:
     print(f"[Herramientas de Red] No se pudo cargar red_suite.py: {_exc_red}")
 
 PORT = 8080
-SESSION_TTL = 8 * 3600
+SESSION_TTL = 4 * 3600
 
 cfg = configparser.ConfigParser()
 cfg.read(os.path.join(SCRIPT_DIR, "config.ini"), encoding="utf-8")
 
+LDAP_USE_SSL = cfg.getboolean("ldap", "use_ssl", fallback=False)
 LDAP_SERVER = cfg["ldap"]["server"]
 LDAP_PORT = int(cfg["ldap"]["port"])
 LDAP_DOMAIN = cfg["ldap"]["domain"]
@@ -108,8 +110,16 @@ _sessions = {}
 _sessions_lock = threading.Lock()
 
 
+def _sessions_purge():
+    ahora = datetime.datetime.now()
+    with _sessions_lock:
+        for t in [t for t, v in _sessions.items() if ahora > v["expires"]]:
+            del _sessions[t]
+
+
 def session_create(user, domain, password):
     token = secrets.token_hex(32)
+    _sessions_purge()
     exp = datetime.datetime.now() + datetime.timedelta(seconds=SESSION_TTL)
     with _sessions_lock:
         _sessions[token] = {
@@ -119,6 +129,30 @@ def session_create(user, domain, password):
             "creds": {domain: {"user": user, "password": password}},
         }
     return token
+
+
+_login_fails = {}
+_login_lock = threading.Lock()
+MAX_FALLOS = 5
+VENTANA_FALLOS = 300
+
+
+def login_bloqueado(key):
+    ahora = datetime.datetime.now().timestamp()
+    with _login_lock:
+        lst = [t for t in _login_fails.get(key, []) if ahora - t < VENTANA_FALLOS]
+        _login_fails[key] = lst
+        return len(lst) >= MAX_FALLOS
+
+
+def login_fallo(key):
+    with _login_lock:
+        _login_fails.setdefault(key, []).append(datetime.datetime.now().timestamp())
+
+
+def login_ok(key):
+    with _login_lock:
+        _login_fails.pop(key, None)
 
 
 def session_get(token):
@@ -209,7 +243,8 @@ def _ps_si():
     return si
 
 
-def run_ps(script):
+def run_ps(script, env_extra=None):
+    env = {**os.environ, **(env_extra or {})}
     header = "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8\n"
     tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".ps1", delete=False, encoding="utf-8")
     try:
@@ -218,7 +253,7 @@ def run_ps(script):
         r = subprocess.run(
             ["powershell", "-NoProfile", "-NonInteractive",
              "-ExecutionPolicy", "Bypass", "-File", tmp.name],
-            capture_output=True, timeout=30, startupinfo=_ps_si()
+            capture_output=True, timeout=30, env=env, startupinfo=_ps_si()
         )
         try:
             stdout = r.stdout.decode("utf-8")
@@ -240,7 +275,8 @@ def run_ps(script):
 
 
 # FIX 1: timeout 15 â†’ 30 segundos
-def run_ps_raw(script):
+def run_ps_raw(script, env_extra=None, timeout=30):
+    env = {**os.environ, **(env_extra or {})}
     tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".ps1", delete=False, encoding="utf-8")
     try:
         tmp.write("[Console]::OutputEncoding=[System.Text.Encoding]::UTF8\n" + script)
@@ -248,7 +284,7 @@ def run_ps_raw(script):
         r = subprocess.run(
             ["powershell", "-NoProfile", "-NonInteractive",
              "-ExecutionPolicy", "Bypass", "-File", tmp.name],
-            capture_output=True, timeout=30, startupinfo=_ps_si()
+            capture_output=True, timeout=timeout, env=env, startupinfo=_ps_si()
         )
         try:
             stdout = r.stdout.decode("utf-8")
@@ -263,8 +299,10 @@ def run_ps_raw(script):
 
 # â”€â”€â”€ Validar credenciales â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 def validate_cjf(user, password):
+    if not _USER_RE.match((user or "").strip()) or not password:
+        return False
     from ldap3 import Server, Connection, ALL, NTLM
-    srv = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL)
+    srv = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL, use_ssl=LDAP_USE_SSL)
     conn = Connection(srv, user=f"{LDAP_DOMAIN}\\{user}", password=password,
                        authentication=NTLM, raise_exceptions=False)
     ok = conn.bind()
@@ -273,30 +311,37 @@ def validate_cjf(user, password):
     return ok
 
 
-def validate_oaj(user, password):
-    script = (
-        f"$ctx=New-Object System.DirectoryServices.DirectoryEntry("
-        f"'LDAP://{OAJ_SERVER}','{OAJ_DOMAIN}\\{user}','{password}',"
-        f"[System.DirectoryServices.AuthenticationTypes]::Secure)\n"
-        f"try{{$null=$ctx.distinguishedName;"
-        f"if($ctx.distinguishedName){{Write-Output 'ok'}}else{{Write-Output 'fail'}}}}"
-        f"catch{{Write-Output 'fail'}}"
-    )
-    code, out, _ = run_ps_raw(script)
+_USER_RE = re.compile(r"^[A-Za-z0-9._\-]{1,64}$")
+
+_PS_VALIDATE = r"""
+try {
+    $ctx = New-Object System.DirectoryServices.DirectoryEntry(
+        "LDAP://$($env:AD_SERVER)",
+        "$($env:AD_DOMAIN)\$($env:AD_USER)",
+        $env:AD_PASS,
+        [System.DirectoryServices.AuthenticationTypes]::Secure)
+    if ($ctx.distinguishedName) { Write-Output 'ok' } else { Write-Output 'fail' }
+} catch { Write-Output 'fail' }
+"""
+
+
+def _validate_ps(server, domain, user, password):
+    user = (user or "").strip()
+    if not _USER_RE.match(user) or not password or len(password) > 256:
+        return False
+    code, out, _ = run_ps_raw(_PS_VALIDATE, env_extra={
+        "AD_SERVER": server, "AD_DOMAIN": domain,
+        "AD_USER": user, "AD_PASS": password,
+    })
     return out.strip().lower() == "ok"
+
+
+def validate_oaj(user, password):
+    return _validate_ps(OAJ_SERVER, OAJ_DOMAIN, user, password)
 
 
 def validate_tdj(user, password):
-    script = (
-        f"$ctx=New-Object System.DirectoryServices.DirectoryEntry("
-        f"'LDAP://{TDJ_SERVER}','{TDJ_DOMAIN}\\{user}','{password}',"
-        f"[System.DirectoryServices.AuthenticationTypes]::Secure)\n"
-        f"try{{$null=$ctx.distinguishedName;"
-        f"if($ctx.distinguishedName){{Write-Output 'ok'}}else{{Write-Output 'fail'}}}}"
-        f"catch{{Write-Output 'fail'}}"
-    )
-    code, out, _ = run_ps_raw(script)
-    return out.strip().lower() == "ok"
+    return _validate_ps(TDJ_SERVER, TDJ_DOMAIN, user, password)
 
 
 def validate_domain(dominio, user, password):
@@ -310,7 +355,7 @@ def validate_domain(dominio, user, password):
 # â”€â”€â”€ consultar_ad (migracion-cjf) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 def consultar_ad(usernames, sess_user, sess_pass):
     from ldap3 import Server, Connection, ALL, NTLM
-    server = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL)
+    server = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL, use_ssl=LDAP_USE_SSL)
     conn = Connection(server, user=f"{LDAP_DOMAIN}\\{sess_user}", password=sess_pass,
                        authentication=NTLM, auto_bind=True)
     results = {}
@@ -342,7 +387,7 @@ def buscar_cjf(query, sess_user, sess_pass):
     safe = escape_ldap(query)
     filtro = (f"(|(sAMAccountName=*{safe}*)(givenName=*{safe}*)"
               f"(sn=*{safe}*)(displayName=*{safe}*)(description=*{safe}*))")
-    server = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL)
+    server = Server(LDAP_SERVER, port=LDAP_PORT, get_info=ALL, use_ssl=LDAP_USE_SSL)
     conn = Connection(server, user=f"{LDAP_DOMAIN}\\{sess_user}", password=sess_pass,
                        authentication=NTLM, auto_bind=True)
     conn.search(LDAP_BASE, filtro, attributes=GESTOR_ATTRS)
@@ -383,179 +428,107 @@ def buscar_cjf(query, sess_user, sess_pass):
 
 
 # â”€â”€â”€ Gestor: buscar OAJ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+_PS_BUSCAR = r"""
+$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Secure
+
+$baseDN = $env:AD_BASE
+try {
+    $root = New-Object System.DirectoryServices.DirectoryEntry(
+        "LDAP://$($env:AD_SERVER)/RootDSE", "$($env:AD_DOMAIN)\$($env:AD_USER)", $env:AD_PASS, $auth)
+    if ($root.defaultNamingContext) { $baseDN = $root.defaultNamingContext }
+} catch {}
+
+$entry = New-Object System.DirectoryServices.DirectoryEntry(
+    "LDAP://$($env:AD_SERVER)/$baseDN", "$($env:AD_DOMAIN)\$($env:AD_USER)", $env:AD_PASS, $auth)
+$search = New-Object System.DirectoryServices.DirectorySearcher($entry)
+$search.Filter = "(|(sAMAccountName=*$($env:AD_QUERY)*)(givenName=*$($env:AD_QUERY)*)(sn=*$($env:AD_QUERY)*)(displayName=*$($env:AD_QUERY)*)(description=*$($env:AD_QUERY)*))"
+$search.SizeLimit = 15
+
+foreach ($a in @('employeeID','givenName','sn','sAMAccountName','mail','displayName',
+    'description','physicalDeliveryOfficeName','telephoneNumber','title','department',
+    'company','userAccountControl','lockoutTime','lastLogonTimestamp','whenCreated',
+    'badPwdCount','pwdLastSet','memberOf','distinguishedName')) {
+    [void]$search.PropertiesToLoad.Add($a)
+}
+
+function LdapVal($r, $k) {
+    if ($r.Properties[$k].Count -gt 0) { return "$($r.Properties[$k][0])" }
+    return ''
+}
+function LdapDate($r, $k) {
+    if ($r.Properties[$k].Count -eq 0) { return '' }
+    try {
+        $raw = $r.Properties[$k][0]
+        if ($raw -is [DateTime]) { return $raw.ToString('yyyy-MM-dd HH:mm') }
+        $v = [Int64]$raw
+        if ($v -le 0) { return '' }
+        return [DateTime]::FromFileTime($v).ToString('yyyy-MM-dd HH:mm')
+    } catch { return '' }
+}
+
+$out = @()
+foreach ($r in $search.FindAll()) {
+    try {
+        $uac = 0; try { $uac = [int](LdapVal $r 'userAccountControl') } catch {}
+        $lock = 0; try { $lock = [Int64]$r.Properties['lockoutTime'][0] } catch {}
+        $pls = 0; try { $pls = [Int64]$r.Properties['pwdLastSet'][0] } catch {}
+
+        $grupos = @($r.Properties['memberOf'] | ForEach-Object {
+            ($_ -split ',')[0] -replace '^CN=','' -replace '^cn=',''
+        } | Sort-Object)
+
+        $out += [PSCustomObject]@{
+            dn = LdapVal $r 'distinguishedName'
+            ID = LdapVal $r 'employeeID'
+            Nombre = LdapVal $r 'givenName'
+            Apellido = LdapVal $r 'sn'
+            Usuario = LdapVal $r 'sAMAccountName'
+            Correo = LdapVal $r 'mail'
+            DisplayName = LdapVal $r 'displayName'
+            description = LdapVal $r 'description'
+            Office = LdapVal $r 'physicalDeliveryOfficeName'
+            Telefono = LdapVal $r 'telephoneNumber'
+            Cargo = LdapVal $r 'title'
+            Departamento = LdapVal $r 'department'
+            Empresa = LdapVal $r 'company'
+            habilitado = if ($uac -band 2) { 'NO' } else { 'SI' }
+            bloqueado = if ($lock -gt 0) { 'SI' } else { 'NO' }
+            pwd_nunca_expira = if ($uac -band 65536) { 'SI' } else { 'NO' }
+            pwd_expirada = if ($uac -band 8388608) { 'SI' } else { 'NO' }
+            pwd_forzar = if ($pls -eq 0) { 'SI' } else { 'NO' }
+            intentos_fallidos = LdapVal $r 'badPwdCount'
+            ultimo_login = LdapDate $r 'lastLogonTimestamp'
+            creado = LdapDate $r 'whenCreated'
+            pwd_ultimo_cambio = LdapDate $r 'pwdLastSet'
+            grupos = $grupos
+        }
+    } catch { [Console]::Error.WriteLine("Error entrada: $_") }
+}
+
+if ($out.Count -eq 0) { Write-Output '[]' }
+else { $out | ConvertTo-Json -Depth 3 }
+"""
+
+
+def _buscar_ps(server, domain, base, query, sess_user, sess_pass):
+    if not _USER_RE.match((sess_user or "").strip()) or not sess_pass:
+        raise PermissionError("Credenciales de sesion invalidas")
+    env = {
+        "AD_SERVER": server, "AD_DOMAIN": domain, "AD_BASE": base,
+        "AD_USER": sess_user.strip(), "AD_PASS": sess_pass,
+        "AD_QUERY": escape_ldap(query),
+    }
+    return run_ps(_PS_BUSCAR, env_extra=env)
+
+
 def buscar_oaj(query, sess_user, sess_pass):
-    safe = escape_ldap(query)
-    ps = f"""
-$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
-        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
-        [System.DirectoryServices.AuthenticationTypes]::Secure
-
-$baseDN = '{OAJ_BASE}'
-try {{
-    $root = New-Object System.DirectoryServices.DirectoryEntry(
-        'LDAP://{OAJ_SERVER}/RootDSE', '{OAJ_DOMAIN}\\{sess_user}', '{sess_pass}', $auth)
-    if ($root.defaultNamingContext) {{ $baseDN = $root.defaultNamingContext }}
-}} catch {{}}
-
-$entry = New-Object System.DirectoryServices.DirectoryEntry(
-    "LDAP://{OAJ_SERVER}/$baseDN", '{OAJ_DOMAIN}\\{sess_user}', '{sess_pass}', $auth)
-$search = New-Object System.DirectoryServices.DirectorySearcher($entry)
-$search.Filter = '(|(sAMAccountName=*{safe}*)(givenName=*{safe}*)(sn=*{safe}*)(displayName=*{safe}*)(description=*{safe}*))'
-$search.SizeLimit = 15
-
-foreach ($a in @('employeeID','givenName','sn','sAMAccountName','mail','displayName',
-    'description','physicalDeliveryOfficeName','telephoneNumber','title','department',
-    'company','userAccountControl','lockoutTime','lastLogonTimestamp','whenCreated',
-    'badPwdCount','pwdLastSet','memberOf','distinguishedName')) {{
-    [void]$search.PropertiesToLoad.Add($a)
-}}
-
-function LdapVal($r, $k) {{
-    if ($r.Properties[$k].Count -gt 0) {{ return "$($r.Properties[$k][0])" }}
-    return ''
-}}
-function LdapDate($r, $k) {{
-    if ($r.Properties[$k].Count -eq 0) {{ return '' }}
-    try {{
-        $raw = $r.Properties[$k][0]
-        if ($raw -is [DateTime]) {{ return $raw.ToString('yyyy-MM-dd HH:mm') }}
-        $v = [Int64]$raw
-        if ($v -le 0) {{ return '' }}
-        return [DateTime]::FromFileTime($v).ToString('yyyy-MM-dd HH:mm')
-    }} catch {{ return '' }}
-}}
-
-$out = @()
-foreach ($r in $search.FindAll()) {{
-    try {{
-        $uac = 0; try {{ $uac = [int](LdapVal $r 'userAccountControl') }} catch {{}}
-        $lock = 0; try {{ $lock = [Int64]$r.Properties['lockoutTime'][0] }} catch {{}}
-        $pls = 0; try {{ $pls = [Int64]$r.Properties['pwdLastSet'][0] }} catch {{}}
-
-        $grupos = @($r.Properties['memberOf'] | ForEach-Object {{
-            ($_ -split ',')[0] -replace '^CN=','' -replace '^cn=',''
-        }} | Sort-Object)
-
-        $out += [PSCustomObject]@{{
-            dn = LdapVal $r 'distinguishedName'
-            ID = LdapVal $r 'employeeID'
-            Nombre = LdapVal $r 'givenName'
-            Apellido = LdapVal $r 'sn'
-            Usuario = LdapVal $r 'sAMAccountName'
-            Correo = LdapVal $r 'mail'
-            DisplayName = LdapVal $r 'displayName'
-            description = LdapVal $r 'description'
-            Office = LdapVal $r 'physicalDeliveryOfficeName'
-            Telefono = LdapVal $r 'telephoneNumber'
-            Cargo = LdapVal $r 'title'
-            Departamento = LdapVal $r 'department'
-            Empresa = LdapVal $r 'company'
-            habilitado = if ($uac -band 2) {{ 'NO' }} else {{ 'SI' }}
-            bloqueado = if ($lock -gt 0) {{ 'SI' }} else {{ 'NO' }}
-            pwd_nunca_expira = if ($uac -band 65536) {{ 'SI' }} else {{ 'NO' }}
-            pwd_expirada = if ($uac -band 8388608) {{ 'SI' }} else {{ 'NO' }}
-            pwd_forzar = if ($pls -eq 0) {{ 'SI' }} else {{ 'NO' }}
-            intentos_fallidos = LdapVal $r 'badPwdCount'
-            ultimo_login = LdapDate $r 'lastLogonTimestamp'
-            creado = LdapDate $r 'whenCreated'
-            pwd_ultimo_cambio = LdapDate $r 'pwdLastSet'
-            grupos = $grupos
-        }}
-    }} catch {{ [Console]::Error.WriteLine("Error entrada: $_") }}
-}}
-
-if ($out.Count -eq 0) {{ Write-Output '[]' }}
-else {{ $out | ConvertTo-Json -Depth 3 }}
-"""
-    return run_ps(ps)
+    return _buscar_ps(OAJ_SERVER, OAJ_DOMAIN, OAJ_BASE, query, sess_user, sess_pass)
 
 
-# â”€â”€â”€ Gestor: buscar TDJ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 def buscar_tdj(query, sess_user, sess_pass):
-    safe = escape_ldap(query)
-    ps = f"""
-$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
-        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
-        [System.DirectoryServices.AuthenticationTypes]::Secure
-
-$baseDN = '{TDJ_BASE}'
-try {{
-    $root = New-Object System.DirectoryServices.DirectoryEntry(
-        'LDAP://{TDJ_SERVER}/RootDSE', '{TDJ_DOMAIN}\\{sess_user}', '{sess_pass}', $auth)
-    if ($root.defaultNamingContext) {{ $baseDN = $root.defaultNamingContext }}
-}} catch {{}}
-
-$entry = New-Object System.DirectoryServices.DirectoryEntry(
-    "LDAP://{TDJ_SERVER}/$baseDN", '{TDJ_DOMAIN}\\{sess_user}', '{sess_pass}', $auth)
-$search = New-Object System.DirectoryServices.DirectorySearcher($entry)
-$search.Filter = '(|(sAMAccountName=*{safe}*)(givenName=*{safe}*)(sn=*{safe}*)(displayName=*{safe}*)(description=*{safe}*))'
-$search.SizeLimit = 15
-
-foreach ($a in @('employeeID','givenName','sn','sAMAccountName','mail','displayName',
-    'description','physicalDeliveryOfficeName','telephoneNumber','title','department',
-    'company','userAccountControl','lockoutTime','lastLogonTimestamp','whenCreated',
-    'badPwdCount','pwdLastSet','memberOf','distinguishedName')) {{
-    [void]$search.PropertiesToLoad.Add($a)
-}}
-
-function LdapVal($r, $k) {{
-    if ($r.Properties[$k].Count -gt 0) {{ return "$($r.Properties[$k][0])" }}
-    return ''
-}}
-function LdapDate($r, $k) {{
-    if ($r.Properties[$k].Count -eq 0) {{ return '' }}
-    try {{
-        $raw = $r.Properties[$k][0]
-        if ($raw -is [DateTime]) {{ return $raw.ToString('yyyy-MM-dd HH:mm') }}
-        $v = [Int64]$raw
-        if ($v -le 0) {{ return '' }}
-        return [DateTime]::FromFileTime($v).ToString('yyyy-MM-dd HH:mm')
-    }} catch {{ return '' }}
-}}
-
-$out = @()
-foreach ($r in $search.FindAll()) {{
-    try {{
-        $uac = 0; try {{ $uac = [int](LdapVal $r 'userAccountControl') }} catch {{}}
-        $lock = 0; try {{ $lock = [Int64]$r.Properties['lockoutTime'][0] }} catch {{}}
-        $pls = 0; try {{ $pls = [Int64]$r.Properties['pwdLastSet'][0] }} catch {{}}
-
-        $grupos = @($r.Properties['memberOf'] | ForEach-Object {{
-            ($_ -split ',')[0] -replace '^CN=','' -replace '^cn=',''
-        }} | Sort-Object)
-
-        $out += [PSCustomObject]@{{
-            dn = LdapVal $r 'distinguishedName'
-            ID = LdapVal $r 'employeeID'
-            Nombre = LdapVal $r 'givenName'
-            Apellido = LdapVal $r 'sn'
-            Usuario = LdapVal $r 'sAMAccountName'
-            Correo = LdapVal $r 'mail'
-            DisplayName = LdapVal $r 'displayName'
-            description = LdapVal $r 'description'
-            Office = LdapVal $r 'physicalDeliveryOfficeName'
-            Telefono = LdapVal $r 'telephoneNumber'
-            Cargo = LdapVal $r 'title'
-            Departamento = LdapVal $r 'department'
-            Empresa = LdapVal $r 'company'
-            habilitado = if ($uac -band 2) {{ 'NO' }} else {{ 'SI' }}
-            bloqueado = if ($lock -gt 0) {{ 'SI' }} else {{ 'NO' }}
-            pwd_nunca_expira = if ($uac -band 65536) {{ 'SI' }} else {{ 'NO' }}
-            pwd_expirada = if ($uac -band 8388608) {{ 'SI' }} else {{ 'NO' }}
-            pwd_forzar = if ($pls -eq 0) {{ 'SI' }} else {{ 'NO' }}
-            intentos_fallidos = LdapVal $r 'badPwdCount'
-            ultimo_login = LdapDate $r 'lastLogonTimestamp'
-            creado = LdapDate $r 'whenCreated'
-            pwd_ultimo_cambio = LdapDate $r 'pwdLastSet'
-            grupos = $grupos
-        }}
-    }} catch {{ [Console]::Error.WriteLine("Error entrada: $_") }}
-}}
-
-if ($out.Count -eq 0) {{ Write-Output '[]' }}
-else {{ $out | ConvertTo-Json -Depth 3 }}
-"""
-    return run_ps(ps)
+    return _buscar_ps(TDJ_SERVER, TDJ_DOMAIN, TDJ_BASE, query, sess_user, sess_pass)
 
 
 def buscar_usuario_gestor(query, dominio, sess):
@@ -572,7 +545,7 @@ def _accion_ldap3(dn, dominio, accion, sess, **kw):
     from ldap3 import Server, Connection, ALL, NTLM, MODIFY_REPLACE
     srv, port, domain, base = get_domain_cfg(dominio)
     u, p = sess_creds(sess, dominio)
-    server = Server(srv, port=port, get_info=ALL)
+    server = Server(srv, port=port, get_info=ALL, use_ssl=LDAP_USE_SSL)
     conn = Connection(server, user=f"{domain}\\{u}", password=p,
                        authentication=NTLM, auto_bind=True)
     if accion == "desbloquear":
@@ -586,90 +559,101 @@ def _accion_ldap3(dn, dominio, accion, sess, **kw):
     return ok, err
 
 
+_PS_ACCION = r"""
+$ErrorActionPreference = 'Stop'
+$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Secure
+$e = New-Object System.DirectoryServices.DirectoryEntry(
+    "LDAP://$($env:AD_SERVER)/$($env:AD_DN)",
+    "$($env:AD_DOMAIN)\$($env:AD_USER)", $env:AD_PASS, $auth)
+switch ($env:AD_ACCION) {
+    'reset'       { $e.psbase.Invoke('SetPassword', $env:AD_NEWPASS) }
+    'desbloquear' { $e.psbase.InvokeSet('IsAccountLocked', $false) }
+    'forzar'      { $e.psbase.InvokeSet('PasswordExpired', 1) }
+    default       { throw 'Accion desconocida' }
+}
+$e.CommitChanges()
+Write-Output 'ok'
+"""
+
+_PS_RESET = r"""
+$ErrorActionPreference = 'Stop'
+$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Secure
+$root = New-Object System.DirectoryServices.DirectoryEntry(
+    "LDAP://$($env:AD_SERVER)", "$($env:AD_DOMAIN)\$($env:AD_USER)", $env:AD_PASS, $auth)
+$search = New-Object System.DirectoryServices.DirectorySearcher($root)
+$search.Filter = $env:AD_FILTER
+$result = $search.FindOne()
+if (-not $result) { throw 'Usuario no encontrado' }
+$entry = $result.GetDirectoryEntry()
+$entry.psbase.Invoke('SetPassword', $env:AD_NEWPASS)
+$entry.CommitChanges()
+Write-Output 'ok'
+"""
+
+_PS_FIND = r"""
+$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Sealing -bor `
+        [System.DirectoryServices.AuthenticationTypes]::Secure
+$entry = New-Object System.DirectoryServices.DirectoryEntry(
+    "LDAP://$($env:AD_SERVER)/$($env:AD_BASE)",
+    "$($env:AD_DOMAIN)\$($env:AD_USER)", $env:AD_PASS, $auth)
+$search = New-Object System.DirectoryServices.DirectorySearcher($entry)
+$search.Filter = $env:AD_FILTER
+[void]$search.PropertiesToLoad.Add('distinguishedName')
+$r = $search.FindOne()
+if ($r) { Write-Output $r.Properties['distinguishedName'][0] } else { Write-Output '' }
+"""
+
+
+def escape_ldap_dn(value):
+    from ldap3.utils.conv import escape_filter_chars
+    return escape_filter_chars(str(value).strip()[:500])
+
+
+def _check_pass(pw):
+    if not pw or len(pw) > 256 or "\x00" in pw:
+        raise ValueError("Contrasena invalida")
+
+
 def _accion_ps(dn, dominio, accion, sess, **kw):
     srv, port, domain, base = get_domain_cfg(dominio)
     u, p = sess_creds(sess, dominio)
-    dn_s = dn.replace("'", "\\'")
-    p_s = p.replace("'", "\\'")
-    auth = (
-        "$auth=[System.DirectoryServices.AuthenticationTypes]::Signing -bor "
-        "[System.DirectoryServices.AuthenticationTypes]::Sealing -bor "
-        "[System.DirectoryServices.AuthenticationTypes]::Secure"
-    )
-    entry = f"$e=New-Object System.DirectoryServices.DirectoryEntry('LDAP://{srv}/{dn_s}','{domain}\\{u}','{p_s}',$auth)"
-    if accion == "reset":
-        np = kw["nueva_pass"].replace("'", "\\'")
-        ps = f"{auth}\n{entry}\n$e.psbase.Invoke('SetPassword','{np}')\n$e.CommitChanges()\nWrite-Output 'ok'"
-    elif accion == "desbloquear":
-        ps = f"{auth}\n{entry}\n$e.psbase.InvokeSet('IsAccountLocked',$false)\n$e.CommitChanges()\nWrite-Output 'ok'"
-    elif accion == "forzar":
-        ps = f"{auth}\n{entry}\n$e.psbase.InvokeSet('PasswordExpired',1)\n$e.CommitChanges()\nWrite-Output 'ok'"
-    else:
+    if accion not in ("reset", "desbloquear", "forzar"):
         return False, "Accion desconocida"
-
-    tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".ps1", delete=False, encoding="utf-8")
-    try:
-        tmp.write("[Console]::OutputEncoding=[System.Text.Encoding]::UTF8\n")
-        tmp.write(ps)
-        tmp.close()
-        r = subprocess.run(
-            ["powershell", "-NoProfile", "-NonInteractive",
-             "-ExecutionPolicy", "Bypass", "-File", tmp.name],
-            capture_output=True, timeout=20, startupinfo=_ps_si()
-        )
-        try:
-            stdout = r.stdout.decode("utf-8")
-            stderr = r.stderr.decode("utf-8")
-        except UnicodeDecodeError:
-            stdout = r.stdout.decode("cp1252", errors="replace")
-            stderr = r.stderr.decode("cp1252", errors="replace")
-        if r.returncode != 0 or "Exception" in stderr:
-            return False, stderr.strip()
-        return True, ""
-    finally:
-        os.unlink(tmp.name)
+    if not dn or len(dn) > 500 or "\x00" in dn:
+        return False, "DN invalido"
+    env = {
+        "AD_SERVER": srv, "AD_DOMAIN": domain, "AD_USER": u, "AD_PASS": p,
+        "AD_DN": dn, "AD_ACCION": accion,
+    }
+    if accion == "reset":
+        _check_pass(kw.get("nueva_pass"))
+        env["AD_NEWPASS"] = kw["nueva_pass"]
+    code, out, err = run_ps_raw(_PS_ACCION, env_extra=env, timeout=20)
+    if code != 0 or "Exception" in err:
+        return False, err.strip()
+    return True, ""
 
 
-# FIX 2: reset_password_ad â€” URL sin base_s, auth Signing+Sealing+Secure
 def reset_password_ad(dn, nueva_pass, dominio, sess, sam=""):
     srv, port, domain, base = get_domain_cfg(dominio)
     u, p = sess_creds(sess, dominio)
+    _check_pass(nueva_pass)
 
-    p_s = p.replace("'", "''")
-    np_s = nueva_pass.replace("'", "''")
-    u_s = (domain + "\\" + u).replace("'", "''")
-    sam_s = sam.strip().replace("'", "''") if sam.strip() else ""
-    srv_s = srv.replace("'", "''")
-
-    if sam_s:
-        filtro = "(sAMAccountName=" + sam_s + ")"
+    sam = (sam or "").strip()
+    if sam:
+        filtro = "(sAMAccountName=" + escape_ldap_dn(sam) + ")"
     else:
-        dn_esc = dn.replace("\\", "\\\\").replace("'", "''")
-        filtro = "(distinguishedName=" + dn_esc + ")"
+        filtro = "(distinguishedName=" + escape_ldap_dn(dn) + ")"
 
-    lines = [
-        "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8",
-        "$auth = [System.DirectoryServices.AuthenticationTypes]::Signing -bor "
-        "[System.DirectoryServices.AuthenticationTypes]::Sealing -bor "
-        "[System.DirectoryServices.AuthenticationTypes]::Secure",
-        "$root = New-Object System.DirectoryServices.DirectoryEntry(",
-        "    'LDAP://" + srv_s + "',",
-        "    '" + u_s + "',",
-        "    '" + p_s + "',",
-        "    $auth",
-        ")",
-        "$search = New-Object System.DirectoryServices.DirectorySearcher($root)",
-        "$search.Filter = '" + filtro + "'",
-        "$result = $search.FindOne()",
-        "if (-not $result) { throw 'Usuario no encontrado: " + (sam_s or dn) + "' }",
-        "$entry = $result.GetDirectoryEntry()",
-        "$entry.psbase.Invoke('SetPassword', '" + np_s + "')",
-        "$entry.CommitChanges()",
-        "Write-Output 'ok'",
-    ]
-    ps = "\n".join(lines)
-
-    code, out, err = run_ps_raw(ps)
+    code, out, err = run_ps_raw(_PS_RESET, env_extra={
+        "AD_SERVER": srv, "AD_DOMAIN": domain, "AD_USER": u, "AD_PASS": p,
+        "AD_FILTER": filtro, "AD_NEWPASS": nueva_pass,
+    })
     if code != 0:
         return False, (err or out or "Error al cambiar contrasena").strip()
     if "ok" not in (out or "").lower():
@@ -702,24 +686,15 @@ def reset_masivo_ad(usuario, nueva_pass, dominio, sess, forzar=False, desbloquea
     try:
         if dominio in ("oaj", "tdj"):
             safe = escape_ldap(usuario)
-            ps_find = (
-                "$auth=[System.DirectoryServices.AuthenticationTypes]::Signing -bor "
-                "[System.DirectoryServices.AuthenticationTypes]::Sealing -bor "
-                "[System.DirectoryServices.AuthenticationTypes]::Secure\n"
-                f"$entry=New-Object System.DirectoryServices.DirectoryEntry("
-                f"'LDAP://{srv}/{base}','{domain}\\{u_s}','{p_s}',$auth)\n"
-                f"$search=New-Object System.DirectoryServices.DirectorySearcher($entry)\n"
-                f"$search.Filter='(sAMAccountName={safe})'\n"
-                "[void]$search.PropertiesToLoad.Add('distinguishedName')\n"
-                "$r=$search.FindOne()\n"
-                "if($r){Write-Output $r.Properties['distinguishedName'][0]}else{Write-Output ''}"
-            )
-            code, out, err = run_ps_raw(ps_find)
+            code, out, err = run_ps_raw(_PS_FIND, env_extra={
+                "AD_SERVER": srv, "AD_DOMAIN": domain, "AD_BASE": base,
+                "AD_USER": u, "AD_PASS": p, "AD_FILTER": "(sAMAccountName=" + safe + ")",
+            })
             dn = out.strip()
             if not dn:
                 return {"ok": False, "dn": "", "error": f"Usuario no encontrado en {dominio.upper()}"}
         else:
-            server = Server(srv, port=port, get_info=ALL)
+            server = Server(srv, port=port, get_info=ALL, use_ssl=LDAP_USE_SSL)
             conn = Connection(server, user=f"{domain}\\{u}", password=p,
                                authentication=NTLM, auto_bind=True)
             safe = escape_ldap(usuario)
@@ -842,7 +817,48 @@ def _ejecutar_escaneo_impresoras(job_id, community, vlans):
 
 
 # â”€â”€â”€ HTTP Handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+_COMM_RE = re.compile(r"^(?!-)[A-Za-z0-9_.@!#%^*+=:\-]{1,64}$")
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
+
+    _EXT_OK = {".html", ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg",
+               ".ico", ".webp", ".woff", ".woff2", ".ttf"}
+    _EXACT_OK = {"/migracion-cjf/data/lm365.xlsx"}
+
+    def send_head(self):
+        ruta = urllib.parse.unquote(urlparse(self.path).path).lower()
+        if not os.path.isdir(self.translate_path(self.path)):
+            partes = [x for x in ruta.split("/") if x]
+            ext = os.path.splitext(ruta)[1]
+            permitido = ruta in self._EXACT_OK or (
+                ext in self._EXT_OK
+                and not any(x.startswith(".") or x == "__pycache__" for x in partes))
+            if not permitido:
+                print(f" [BLOQUEADO] archivo estatico no permitido: {ruta}")
+                self.send_error(404)
+                return None
+        return super().send_head()
+
+    def list_directory(self, path):
+        self.send_error(404)
+        return None
+
+    def _sec_headers(self):
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        self.send_header("Referrer-Policy", "no-referrer")
+
+    def _validar_login(self, dominio, user, password):
+        key = (self.client_address[0], (user or "").lower(), dominio)
+        if login_bloqueado(key):
+            raise RuntimeError("Demasiados intentos fallidos. Espera 5 minutos.")
+        ok = validate_domain(dominio, user, password)
+        if ok:
+            login_ok(key)
+        else:
+            login_fallo(key)
+        return ok
 
     def _get_token(self):
         auth = self.headers.get("Authorization", "")
@@ -927,8 +943,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         # â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         if path == "/api/m365":
+            if not self._require_session():
+                return
             params = parse_qs(parsed.query)
-            user_red = params.get("userRed", [""])[0]
+            user_red = params.get("userRed", [""])[0].strip()
+            if not _USER_RE.match(user_red):
+                self._json(400, {"error": "userRed invalido"})
+                return
             try:
                 url = f"{M365_REAL}?userRed={urllib.parse.quote(user_red)}"
                 req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
@@ -936,11 +957,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     body = resp.read()
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
-                self.send_header("Access-Control-Allow-Origin", "*")
+                self._sec_headers()
                 self.end_headers()
                 self.wfile.write(body)
             except Exception as exc:
-                self._json(502, {"error": str(exc)})
+                self._json(502, {"error": "No se pudo consultar M365"})
             return
         if path == "/api/session":
             sess = self._get_session()
@@ -1046,7 +1067,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if not user or not password:
                 self._json(400, {"error": "Usuario y contrasena requeridos"}); return
             try:
-                ok = validate_domain(dominio, user, password)
+                ok = self._validar_login(dominio, user, password)
                 if ok:
                     token = session_create(user, dominio, password)
                     self._json(200, {"ok": True, "token": token,
@@ -1068,7 +1089,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if not dominio or not user or not password:
                 self._json(400, {"error": "dominio, user y password requeridos"}); return
             try:
-                ok = validate_domain(dominio, user, password)
+                ok = self._validar_login(dominio, user, password)
                 if ok:
                     token = self._get_token()
                     session_add_domain(token, dominio, user, password)
@@ -1214,6 +1235,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if path == "/api/impresoras/ips/escanear":
             body = self._read_json()
             community = (body.get("community") or "public").strip() or "public"
+            if not _COMM_RE.match(community):
+                self._json(400, {"error": "Community invalida"}); return
             ips, invalidas = _parsear_ips(body.get("texto", ""))
             if not ips:
                 self._json(400, {"error": "No se encontraron IPs validas en el texto pegado"}); return
@@ -1232,6 +1255,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             body      = self._read_json()
             community = body.get("community", "public").strip() or "public"
             vlans     = body.get("vlans", ["100", "101", "102"])
+            if not isinstance(community, str) or not _COMM_RE.match(community):
+                self._json(400, {"error": "Community invalida"}); return
+            if not isinstance(vlans, list) or not all(re.fullmatch(r"\d{1,4}", str(v)) for v in vlans):
+                self._json(400, {"error": "VLANs invalidas"}); return
+            vlans = [str(v) for v in vlans]
             if not vlans:
                 self._json(400, {"error": "Selecciona al menos una VLAN"}); return
 
@@ -1250,14 +1278,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_error(404)
 
     def _read_json(self):
-        length = int(self.headers.get("Content-Length", 0))
-        return json.loads(self.rfile.read(length))
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+        except ValueError:
+            return {}
+        if length <= 0 or length > 1_000_000:
+            return {}
+        try:
+            data = json.loads(self.rfile.read(length))
+        except Exception:
+            return {}
+        return data if isinstance(data, dict) else {}
 
     def _json(self, code, data):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-store")
+        self._sec_headers()
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -1267,6 +1305,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             content = f.read()
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
+        self._sec_headers()
         self.send_header("Content-Length", str(len(content)))
         self.end_headers()
         self.wfile.write(content)
